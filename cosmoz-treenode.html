@@ -1,0 +1,140 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../cosmoz-tree/cosmoz-tree.html">
+
+<!--
+`cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
+
+@demo demo/index.html
+-->
+<dom-module id="cosmoz-treenode">
+    <template>
+        <style>
+            :host {
+                @apply --layout-horizontal;
+            }
+
+            ::slotted(.separator) {
+                margin-left: 0.2em;
+                margin-right: 0.2em;
+            }
+        </style>
+        <template>
+            <span class="separator" hidden$="[[ isFirst ]]">[[ pathSeparator ]]</span><span>[[ node.name ]]</span>
+        </template>
+        <slot></slot>
+    </template>
+    <script>
+        Polymer({
+            is: 'cosmoz-treenode',
+
+            properties: {
+
+                nodeId: {
+                    type: Object
+                },
+
+                ownerTree: {
+                    type: Cosmoz.Tree
+                },
+
+                pathSeparator: {
+                    type: String,
+                    value : '/'
+                },
+
+                nodeAs: {
+                    type: String,
+                    value: 'node'
+                },
+            },
+
+            behaviors: [
+                Polymer.Templatizer
+            ],
+
+            observers: [
+                '_renderNode(nodeId, ownerTree, pathSeparator, nodeAs)'
+            ],
+
+            _nodeTemplate: null,
+            _templateInstances: null,
+            _instanceProps: null,
+
+            ready: function () {
+                this._instanceProps = {};
+                this._instanceProps[this.nodeAs] = true;
+                this._instanceProps['isFirst'] = true;
+                this._templateInstances = [];
+    		},
+
+            attached: function () {
+                console.log('attached');
+            },
+
+            _renderNode: function (nodeId, ownerTree, pathSeparator, nodeAs) {
+                var path, i, instance, parent;
+
+                parent = Polymer.dom(this);
+                this._ensureTemplatized();
+
+                path = ownerTree.getPath(nodeId);
+
+                for (i = 0; i < path.length; i+=1) {
+                    instance = this.stamp();
+                    instance[this.nodeAs] = path[i];
+                    instance['isFirst'] = i == 0;
+                    this._templateInstances.push(instance);
+                    parent.appendChild(instance.root);
+                }
+            },
+
+            _cleanPreviousRender: function () {
+                var inst, i, j, child;
+
+                if (this._templateInstances !== undefined && this._templateInstances.length > 0) {
+                    for (i = 0; i < this._templateInstances.length; i+=1) {
+                        inst = this._templateInstances[i];
+                        // TODO(pasleq): not safe to use Templatizer internal property, but seems children is not working on Safari
+                        // See Polymer.Templatizer source
+                        for (j = 0; j <inst._children.length; j+=1) {
+                            // Appending the child to instance instance's root will detach it from it's current location
+                            Polymer.dom(inst.root).appendChild(inst._children[j]);
+                        }
+                    }
+
+                    this._templateInstances.splice(0);
+                }
+            },
+
+            _ensureTemplatized: function () {
+                if (!this.ctor) {
+                    this._nodeTemplate = Polymer.dom(this).querySelector('template');
+                    if (this._nodeTemplate === null) {
+                        this._nodeTemplate = Polymer.dom(this.root).querySelector('template');
+                    }
+
+                    this.templatize(this._nodeTemplate);
+                }
+            },
+
+
+            _forwardParentProp: function (prop, value) {
+                if (this._templateInstances) {
+                    this._templateInstances.forEach(function (inst) {
+                        inst[prop] = value;
+                    }, this);
+                }
+            },
+
+            _forwardParentPath: function (path, value) {
+                if (this._templateInstances) {
+                    this._templateInstances.forEach(function (inst) {
+                        inst.notifyPath(path, value, true);
+                    });
+                }
+            }
+        });
+    </script>
+
+</dom-module>
