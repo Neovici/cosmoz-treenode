@@ -3,7 +3,8 @@
   "description": "Utility class to manipulate a tree data structure",
   "main": "cosmoz-treenode.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "cosmoz-tree": "Neovici/cosmoz-tree"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
