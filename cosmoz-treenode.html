@@ -75,6 +75,8 @@
             _renderNode: function (nodeId, ownerTree, pathSeparator, nodeAs) {
                 var path, i, instance, parent;
 
+                this._cleanPreviousRender();
+                
                 parent = Polymer.dom(this);
                 this._ensureTemplatized();
 
