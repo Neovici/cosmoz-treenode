@@ -22,36 +22,61 @@
 			<demo-snippet>
 				<template is="dom-bind" id="basic">
 					<iron-ajax auto
-						url="tree.json" 
-						handle-as="json" 
+						url="tree.json"
+						handle-as="json"
 						last-response="{{ treeJson }}">
 					</iron-ajax>
 					<div>
 						<h2>Displaying node 'Company Ktwoktqtxv'</h2>
-						<cosmoz-treenode 
-							node-id='f7a21733-0e65-4985-9e40-a4fb00f3124f' 
+						<cosmoz-treenode
+							node-id='f7a21733-0e65-4985-9e40-a4fb00f3124f'
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Displaying node 'Company Djpahhofjp'</h2>
-						<cosmoz-treenode 
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252' 
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							owner-tree="[[ getOwnerTree(treeJson) ]]">
+						</cosmoz-treenode>
+					</div>
+					<div>
+						<h2>Displaying node 'Company Djpahhofjp', hiding first 3 nodes from root</h2>
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							hide-from-root="3"
+							owner-tree="[[ getOwnerTree(treeJson) ]]">
+						</cosmoz-treenode>
+					</div>
+					<div>
+						<h2>Displaying node 'Company Djpahhofjp', showing only 3 nodes</h2>
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							show-max-nodes="3"
+							owner-tree="[[ getOwnerTree(treeJson) ]]">
+						</cosmoz-treenode>
+					</div>
+					<div>
+						<h2>Displaying node 'Company Djpahhofjp', hiding first 2, showing max 2 nodes</h2>
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							show-max-nodes="2"
+							hide-from-root="2"
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Alternate separator</h2>
-						<cosmoz-treenode 
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252' 
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
 							owner-tree="[[ getOwnerTree(treeJson) ]]"
 							path-separator="##">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Alternate template</h2>
-						<cosmoz-treenode 
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252' 
+						<cosmoz-treenode
+							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 
 							<template>
@@ -59,6 +84,7 @@
 							</template>
 						</cosmoz-treenode>
 					</div>
+
 				</template>
 			</demo-snippet>
 		</div>

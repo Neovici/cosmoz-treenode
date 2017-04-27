@@ -18,11 +18,19 @@
                 margin-left: 0.2em;
                 margin-right: 0.2em;
             }
+
+			[hidden] {
+				display: none !important;
+			}
         </style>
+
         <template>
             <span class="separator" hidden$="[[ isFirst ]]">[[ pathSeparator ]]</span><span>[[ node.name ]]</span>
         </template>
+
+		<span id="ellipsis">[[ ellipsis ]]</span>
         <slot></slot>
+
     </template>
     <script>
         Polymer({
@@ -47,6 +55,24 @@
                     type: String,
                     value: 'node'
                 },
+
+				/**
+				 * Represent a number of nodes that should not be rendered starting from root.
+				 * If the path to the displayed node has less nodes than this number, then nothing is hidden.
+				 */
+				hideFromRoot: {
+					type: Number,
+					value: 0
+				},
+
+				showMaxNodes: {
+					type: Number
+				},
+
+				ellipsis: {
+					type: String,
+					value: '...'
+				}
             },
 
             behaviors: [
@@ -73,16 +99,32 @@
             },
 
             _renderNode: function (nodeId, ownerTree, pathSeparator, nodeAs) {
-                var path, i, instance, parent;
+                var path, start, i, instance, parent;
 
                 this._cleanPreviousRender();
-                
+
                 parent = Polymer.dom(this);
                 this._ensureTemplatized();
 
                 path = ownerTree.getPath(nodeId);
 
-                for (i = 0; i < path.length; i+=1) {
+				if (this.hideFromRoot > 0 && path.length > this.hideFromRoot) {
+					start = this.hideFromRoot;
+				} else {
+					start = 0;
+				}
+
+				if (this.showMaxNodes !== undefined && this.showMaxNodes > 0) {
+					start = Math.max(start, path.length - this.showMaxNodes);
+				}
+
+				if (start > 0) {
+					this.$.ellipsis.hidden = false;
+				} else {
+					this.$.ellipsis.hidden = true;
+				}
+
+                for (i = start; i < path.length; i+=1) {
                     instance = this.stamp();
                     instance[this.nodeAs] = path[i];
                     instance['isFirst'] = i == 0;
