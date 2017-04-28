@@ -91,7 +91,7 @@
             ],
 
             observers: [
-                '_renderNode(_path, pathSeparator, nodeAs)'
+                '_renderNode(_path, pathSeparator, nodeAs, hideFromRoot)'
             ],
 
             _nodeTemplate: null,
@@ -110,28 +110,33 @@
                 console.log('attached');
             },
 
-            _renderNode: function (path, pathSeparator, nodeAs) {
+            _renderNode: function (path, pathSeparator, nodeAs, hideFromRoot) {
                 
-                var start = 0,
+                var start = hideFromRoot,
                     i,
                     instance,
-                    parent;
-
+                    parent,
+                    node = path[path.length - 1],
+                    // provided path might have been clipped
+                    fullPathLength = node.pathLocator.split('.').length,
+                    hiddenPathParts = fullPathLength - path.length;
 
                 this._cleanPreviousRender();
 
                 parent = Polymer.dom(this);
                 this._ensureTemplatized();
 
-				if (this.hideFromRoot > 0 && path.length > this.hideFromRoot) {
-					start = this.hideFromRoot;
-				}
+                console.log('start, should be equal to hideFromRoot', start, hideFromRoot, this.hideFromRoot);
+                if (hiddenPathParts <= start) {
+                    start -= hiddenPathParts;
+                }
+                console.log(start);
 
 				if (this.showMaxNodes !== undefined && this.showMaxNodes > 0) {
 					start = Math.max(start, path.length - this.showMaxNodes);
 				}
 
-				this.$.ellipsis.hidden = start === 0;
+				this.$.ellipsis.hidden = start < 1;
 
                 for (i = start; i < path.length; i+=1) {
                     instance = this.stamp();
