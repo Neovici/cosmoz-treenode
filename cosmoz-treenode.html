@@ -39,16 +39,22 @@
             properties: {
 
                 nodeId: {
-                    type: Object
+                    type: Object,
+                    value: null
                 },
 
                 ownerTree: {
                     type: Cosmoz.Tree
                 },
 
+                pathLocator: {
+                    type: String,
+                    value: null
+                },
+
                 pathSeparator: {
                     type: String,
-                    value : '/'
+                    value: '/'
                 },
 
                 nodeAs: {
@@ -72,7 +78,12 @@
 				ellipsis: {
 					type: String,
 					value: '...'
-				}
+				},
+
+                _path: {
+                    type: Array,
+                    computed: '_computePath(nodeId, pathLocator, ownerTree)'
+                }
             },
 
             behaviors: [
@@ -80,7 +91,7 @@
             ],
 
             observers: [
-                '_renderNode(nodeId, ownerTree, pathSeparator, nodeAs)'
+                '_renderNode(_path, pathSeparator, nodeAs)'
             ],
 
             _nodeTemplate: null,
@@ -88,9 +99,10 @@
             _instanceProps: null,
 
             ready: function () {
-                this._instanceProps = {};
+                this._instanceProps = {
+                    isFirst: true
+                };
                 this._instanceProps[this.nodeAs] = true;
-                this._instanceProps['isFirst'] = true;
                 this._templateInstances = [];
     		},
 
@@ -98,31 +110,28 @@
                 console.log('attached');
             },
 
-            _renderNode: function (nodeId, ownerTree, pathSeparator, nodeAs) {
-                var path, start, i, instance, parent;
+            _renderNode: function (path, pathSeparator, nodeAs) {
+                
+                var start = 0,
+                    i,
+                    instance,
+                    parent;
+
 
                 this._cleanPreviousRender();
 
                 parent = Polymer.dom(this);
                 this._ensureTemplatized();
 
-                path = ownerTree.getPath(nodeId);
-
 				if (this.hideFromRoot > 0 && path.length > this.hideFromRoot) {
 					start = this.hideFromRoot;
-				} else {
-					start = 0;
 				}
 
 				if (this.showMaxNodes !== undefined && this.showMaxNodes > 0) {
 					start = Math.max(start, path.length - this.showMaxNodes);
 				}
 
-				if (start > 0) {
-					this.$.ellipsis.hidden = false;
-				} else {
-					this.$.ellipsis.hidden = true;
-				}
+				this.$.ellipsis.hidden = start === 0;
 
                 for (i = start; i < path.length; i+=1) {
                     instance = this.stamp();
@@ -149,6 +158,16 @@
 
                     this._templateInstances.splice(0);
                 }
+            },
+
+            _computePath: function (nodeId, pathLocator, ownerTree) {
+                if (nodeId === null && pathLocator === null) {
+                    return;
+                }
+                if (nodeId !== null) {
+                    return ownerTree.getPath(nodeId);
+                }
+                return ownerTree.getPathByLocator(pathLocator);
             },
 
             _ensureTemplatized: function () {
