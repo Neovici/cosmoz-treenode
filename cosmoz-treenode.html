@@ -13,30 +13,47 @@
             :host {
                 @apply --layout-horizontal;
             }
-
-            ::slotted(.separator) {
-                margin-left: 0.2em;
+            #ellipsis {
                 margin-right: 0.2em;
             }
-
-			[hidden] {
-				display: none !important;
-			}
+            .separator {
+                margin: 0 0.2em;
+            }
+            .separator.sep0 {
+                display: none;
+            }
         </style>
 
-        <template>
-            <span class="separator" hidden$="[[ isFirst ]]">[[ pathSeparator ]]</span><span>[[ node.name ]]</span>
+        <span id="ellipsis" hidden="[[ !hideFromRoot ]]">[[ ellipsis ]]</span>
+        
+        <template is="dom-repeat" items="[[ pathToRender ]]" as="part">
+            <span class$="separator sep[[ index ]]"> [[ pathSeparator ]]</span> <span>[[ part.name ]]</span>
         </template>
 
-		<span id="ellipsis">[[ ellipsis ]]</span>
         <slot></slot>
-
     </template>
     <script>
         Polymer({
             is: 'cosmoz-treenode',
 
             properties: {
+
+                /**
+                 * Generic way to hint about key type, or unknown if we should guess
+                 */
+                keyType: {
+                    type: String,
+                    value: 'unknown'
+                },
+
+                /**
+                 * The value for the keyType (nodeId or pathLocator),
+                 * will be reflected to the right property based on keyType
+                 * value or guess
+                 */
+                keyId: {
+                    type: String
+                },
 
                 nodeId: {
                     type: Object,
@@ -57,28 +74,24 @@
                     value: '/'
                 },
 
-                nodeAs: {
-                    type: String,
-                    value: 'node'
-                },
-
 				/**
 				 * Represent a number of nodes that should not be rendered starting from root.
 				 * If the path to the displayed node has less nodes than this number, then nothing is hidden.
 				 */
 				hideFromRoot: {
 					type: Number,
-					value: 0
-				},
-
-				showMaxNodes: {
-					type: Number
+                    value: 0
 				},
 
 				ellipsis: {
 					type: String,
-					value: '...'
+					value: '… /'
 				},
+
+                pathToRender: {
+                    type: Array,
+                    computed: 'computePathToRender(_path, hideFromRoot)'
+                },
 
                 _path: {
                     type: Array,
@@ -86,87 +99,31 @@
                 }
             },
 
-            behaviors: [
-                Polymer.Templatizer
-            ],
-
             observers: [
-                '_renderNode(_path, pathSeparator, nodeAs, hideFromRoot)'
+                '_setKey(keyType, keyId)'
             ],
 
-            _nodeTemplate: null,
-            _templateInstances: null,
-            _instanceProps: null,
-
-            ready: function () {
-                this._instanceProps = {
-                    isFirst: true
-                };
-                this._instanceProps[this.nodeAs] = true;
-                this._templateInstances = [];
-    		},
-
-            attached: function () {
-                console.log('attached');
-            },
-
-            _renderNode: function (path, pathSeparator, nodeAs, hideFromRoot) {
-
-                if (!path || !Array.isArray(path) || path.length === 0) {
+            computePathToRender: function (path, hideFromRoot) {
+                if (!path || !Array.isArray(path) || path.length < 1) {
                     return;
                 }
-                
-                var start = hideFromRoot,
-                    i,
-                    instance,
-                    parent,
-                    node = path[path.length - 1],
-                    // provided path might have been clipped
-                    fullPathLength = node.pathLocator.split('.').length,
-                    hiddenPathParts = fullPathLength - path.length;
-
-                this._cleanPreviousRender();
-
-                parent = Polymer.dom(this);
-                this._ensureTemplatized();
-
-                console.log('start, should be equal to hideFromRoot', start, hideFromRoot, this.hideFromRoot);
-                if (hiddenPathParts <= start) {
-                    start -= hiddenPathParts;
-                }
-                console.log(start);
-
-				if (this.showMaxNodes !== undefined && this.showMaxNodes > 0) {
-					start = Math.max(start, path.length - this.showMaxNodes);
-				}
-
-				this.$.ellipsis.hidden = start < 1;
-
-                for (i = start; i < path.length; i+=1) {
-                    instance = this.stamp();
-                    instance[this.nodeAs] = path[i];
-                    instance['isFirst'] = i == 0;
-                    this._templateInstances.push(instance);
-                    parent.appendChild(instance.root);
-                }
+                return path.filter(function (part, index) {
+                    return index + 1 > hideFromRoot;
+                });
             },
 
-            _cleanPreviousRender: function () {
-                var inst, i, j, child;
-
-                if (this._templateInstances !== undefined && this._templateInstances.length > 0) {
-                    for (i = 0; i < this._templateInstances.length; i+=1) {
-                        inst = this._templateInstances[i];
-                        // TODO(pasleq): not safe to use Templatizer internal property, but seems children is not working on Safari
-                        // See Polymer.Templatizer source
-                        for (j = 0; j <inst._children.length; j+=1) {
-                            // Appending the child to instance instance's root will detach it from it's current location
-                            Polymer.dom(inst.root).appendChild(inst._children[j]);
-                        }
-                    }
-
-                    this._templateInstances.splice(0);
+            _setKey: function (keyType, keyId) {
+                if (!keyType) {
+                    return;
                 }
+                if (keyType === 'unknown') {
+                    if (keyId.length === 36) { // FIXME: GUID check
+                        keyType = 'nodeId';
+                    } else {
+                        keyType = 'pathLocator';
+                    }
+                }
+                this.set(keyType, keyId);
             },
 
             _computePath: function (nodeId, pathLocator, ownerTree) {
@@ -177,36 +134,7 @@
                     return ownerTree.getPath(nodeId);
                 }
                 return ownerTree.getPathByLocator(pathLocator);
-            },
-
-            _ensureTemplatized: function () {
-                if (!this.ctor) {
-                    this._nodeTemplate = Polymer.dom(this).querySelector('template');
-                    if (this._nodeTemplate === null) {
-                        this._nodeTemplate = Polymer.dom(this.root).querySelector('template');
-                    }
-
-                    this.templatize(this._nodeTemplate);
-                }
-            },
-
-
-            _forwardParentProp: function (prop, value) {
-                if (this._templateInstances) {
-                    this._templateInstances.forEach(function (inst) {
-                        inst[prop] = value;
-                    }, this);
-                }
-            },
-
-            _forwardParentPath: function (path, value) {
-                if (this._templateInstances) {
-                    this._templateInstances.forEach(function (inst) {
-                        inst.notifyPath(path, value, true);
-                    });
-                }
             }
         });
     </script>
-
 </dom-module>
