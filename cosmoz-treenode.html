@@ -8,71 +8,71 @@
 @demo demo/index.html
 -->
 <dom-module id="cosmoz-treenode">
-    <template>
-        <style>
-            :host {
-                @apply --layout-horizontal;
-            }
-            #ellipsis {
-                margin-right: 0.2em;
-            }
-            .separator {
-                margin: 0 0.2em;
-            }
-            .separator.sep0 {
-                display: none;
-            }
-        </style>
+	<template>
+		<style>
+			:host {
+				@apply --layout-horizontal;
+			}
+			#ellipsis {
+				margin-right: 0.2em;
+			}
+			.separator {
+				margin: 0 0.2em;
+			}
+			.separator.sep0 {
+				display: none;
+			}
+		</style>
 
-        <span id="ellipsis" hidden="[[ !hideFromRoot ]]">[[ ellipsis ]]</span>
-        
-        <template is="dom-repeat" items="[[ pathToRender ]]" as="part">
-            <span class$="separator sep[[ index ]]"> [[ pathSeparator ]]</span> <span>[[ part.name ]]</span>
-        </template>
+		<span id="ellipsis" hidden="[[ !hideFromRoot ]]">[[ ellipsis ]]</span>
+		
+		<template is="dom-repeat" items="[[ pathToRender ]]" as="part">
+			<span class$="separator sep[[ index ]]"> [[ pathSeparator ]]</span> <span>[[ part.name ]]</span>
+		</template>
 
-        <slot></slot>
-    </template>
-    <script>
-        Polymer({
-            is: 'cosmoz-treenode',
+		<slot></slot>
+	</template>
+	<script>
+		Polymer({
+			is: 'cosmoz-treenode',
 
-            properties: {
+			properties: {
 
-                /**
-                 * Generic way to hint about key type, or unknown if we should guess
-                 */
-                keyType: {
-                    type: String,
-                    value: 'unknown'
-                },
+				/**
+				 * Generic way to hint about key type, or unknown if we should guess
+				 */
+				keyType: {
+					type: String,
+					value: 'unknown'
+				},
 
-                /**
-                 * The value for the keyType (nodeId or pathLocator),
-                 * will be reflected to the right property based on keyType
-                 * value or guess
-                 */
-                keyId: {
-                    type: String
-                },
+				/**
+				 * The value for the keyType (nodeId or pathLocator),
+				 * will be reflected to the right property based on keyType
+				 * value or guess
+				 */
+				keyId: {
+					type: String
+				},
 
-                nodeId: {
-                    type: Object,
-                    value: null
-                },
+				nodeId: {
+					type: Object,
+					value: null
+				},
 
-                ownerTree: {
-                    type: Cosmoz.Tree
-                },
+				ownerTree: {
+					type: Cosmoz.Tree
+				},
 
-                pathLocator: {
-                    type: String,
-                    value: null
-                },
+				pathLocator: {
+					type: String,
+					value: null
+				},
 
-                pathSeparator: {
-                    type: String,
-                    value: '/'
-                },
+				pathSeparator: {
+					type: String,
+					value: '/'
+				},
 
 				/**
 				 * Represent a number of nodes that should not be rendered starting from root.
@@ -80,7 +80,7 @@
 				 */
 				hideFromRoot: {
 					type: Number,
-                    value: 0
+					value: 0
 				},
 
 				ellipsis: {
@@ -88,53 +88,53 @@
 					value: '… /'
 				},
 
-                pathToRender: {
-                    type: Array,
-                    computed: 'computePathToRender(_path, hideFromRoot)'
-                },
+				pathToRender: {
+					type: Array,
+					computed: 'computePathToRender(_path, hideFromRoot)'
+				},
 
-                _path: {
-                    type: Array,
-                    computed: '_computePath(nodeId, pathLocator, ownerTree)'
-                }
-            },
+				_path: {
+					type: Array,
+					computed: '_computePath(nodeId, pathLocator, ownerTree)'
+				}
+			},
 
-            observers: [
-                '_setKey(keyType, keyId)'
-            ],
+			observers: [
+				'_setKey(keyType, keyId)'
+			],
 
-            computePathToRender: function (path, hideFromRoot) {
-                if (!path || !Array.isArray(path) || path.length < 1) {
-                    return;
-                }
-                return path.filter(function (part, index) {
-                    return index + 1 > hideFromRoot;
-                });
-            },
+			computePathToRender: function (path, hideFromRoot) {
+				if (!path || !Array.isArray(path) || path.length < 1) {
+					return;
+				}
+				return path.filter(function (part, index) {
+					return index + 1 > hideFromRoot;
+				});
+			},
 
-            _setKey: function (keyType, keyId) {
-                if (!keyType) {
-                    return;
-                }
-                if (keyType === 'unknown') {
-                    if (this.ownerTree.isGuid(keyId)) {
-                        keyType = 'nodeId';
-                    } else {
-                        keyType = 'pathLocator';
-                    }
-                }
-                this.set(keyType, keyId);
-            },
+			_setKey: function (keyType, keyId) {
+				if (!keyType) {
+					return;
+				}
+				if (keyType === 'unknown') {
+					if (this.ownerTree.isGuid(keyId)) {
+						keyType = 'nodeId';
+					} else {
+						keyType = 'pathLocator';
+					}
+				}
+				this.set(keyType, keyId);
+			},
 
-            _computePath: function (nodeId, pathLocator, ownerTree) {
-                if (nodeId === null && pathLocator === null) {
-                    return;
-                }
-                if (nodeId !== null) {
-                    return ownerTree.getPath(nodeId);
-                }
-                return ownerTree.getPathByLocator(pathLocator);
-            }
-        });
-    </script>
+			_computePath: function (nodeId, pathLocator, ownerTree) {
+				if (nodeId === null && pathLocator === null) {
+					return;
+				}
+				if (nodeId !== null) {
+					return ownerTree.getPath(nodeId);
+				}
+				return ownerTree.getPathByLocator(pathLocator);
+			}
+		});
+	</script>
 </dom-module>
