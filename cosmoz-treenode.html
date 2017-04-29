@@ -117,7 +117,7 @@
                     return;
                 }
                 if (keyType === 'unknown') {
-                    if (keyId.length === 36) { // FIXME: GUID check
+                    if (this.ownerTree.isGuid(keyId)) {
                         keyType = 'nodeId';
                     } else {
                         keyType = 'pathLocator';
