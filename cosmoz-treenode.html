@@ -111,6 +111,10 @@
             },
 
             _renderNode: function (path, pathSeparator, nodeAs, hideFromRoot) {
+
+                if (!path || !Array.isArray(path) || path.length === 0) {
+                    return;
+                }
                 
                 var start = hideFromRoot,
                     i,
