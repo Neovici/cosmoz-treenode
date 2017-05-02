@@ -60,7 +60,8 @@
 
 				nodeId: {
 					type: Object,
-					value: null
+					value: null,
+					observer: 'nodeIdChanged'
 				},
 
 				ownerTree: {
@@ -98,7 +99,7 @@
 
 				_path: {
 					type: Array,
-					computed: '_computePath(nodeId, pathLocator, ownerTree)'
+					computed: '_computePath(pathLocator, ownerTree)'
 				}
 			},
 
@@ -110,9 +111,21 @@
 				if (!path || !Array.isArray(path) || path.length < 1) {
 					return;
 				}
+				var pathOffset = this.pathLocator.split('.').length - path.length;
 				return path.filter(function (part, index) {
-					return index + 1 > hideFromRoot;
+					return index + pathOffset >= hideFromRoot;
 				});
+			},
+
+			nodeIdChanged: function (newNodeId) {
+				if (!newNodeId || !this.ownerTree) {
+					return;
+				}
+				var node = this.ownerTree.findNodeById(newNodeId);
+				if (!node || !node.pathLocator) {
+					return;
+				}
+				this.set('pathLocator', node.pathLocator);
 			},
 
 			_setKey: function (keyType, keyId) {
@@ -129,12 +142,9 @@
 				this.set(keyType, keyId);
 			},
 
-			_computePath: function (nodeId, pathLocator, ownerTree) {
-				if (nodeId === null && pathLocator === null) {
+			_computePath: function (pathLocator, ownerTree) {
+				if (!pathLocator) {
 					return;
-				}
-				if (nodeId !== null) {
-					return ownerTree.getPath(nodeId);
 				}
 				return ownerTree.getPathByLocator(pathLocator);
 			}
