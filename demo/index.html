@@ -11,8 +11,8 @@
 		<link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
 		<link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
 		<link rel="import" href="../../iron-ajax/iron-ajax.html">
+		<link rel="import" href="../../cosmoz-tree/cosmoz-default-tree.html">
 		<link rel="import" href="../cosmoz-treenode.html">
-
 		<style is="custom-style" include="demo-pages-shared-styles">
 		</style>
 	</head>
@@ -28,47 +28,34 @@
 					</iron-ajax>
 					<div>
 						<h2>Displaying node 'Company Ktwoktqtxv'</h2>
-						<cosmoz-treenode
-							node-id='f7a21733-0e65-4985-9e40-a4fb00f3124f'
+						<cosmoz-treenode id="treenode1"
+							key-property="id"
+							key-value="f7a21733-0e65-4985-9e40-a4fb00f3124f"
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Displaying node 'Company Djpahhofjp'</h2>
 						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							key-property="id"
+							key-value="fc78989a-d213-496c-80db-a4fb00f31252"
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Displaying node 'Company Djpahhofjp', hiding first 3 nodes from root</h2>
 						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							key-property="id"
+							key-value="fc78989a-d213-496c-80db-a4fb00f31252"
 							hide-from-root="3"
-							owner-tree="[[ getOwnerTree(treeJson) ]]">
-						</cosmoz-treenode>
-					</div>
-					<div>
-						<h2>Displaying node 'Company Djpahhofjp', showing only 3 nodes</h2>
-						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
-							show-max-nodes="3"
-							owner-tree="[[ getOwnerTree(treeJson) ]]">
-						</cosmoz-treenode>
-					</div>
-					<div>
-						<h2>Displaying node 'Company Djpahhofjp', hiding first 2, showing max 2 nodes</h2>
-						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
-							show-max-nodes="2"
-							hide-from-root="2"
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 						</cosmoz-treenode>
 					</div>
 					<div>
 						<h2>Alternate separator</h2>
 						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							key-property="id"
+							key-value="fc78989a-d213-496c-80db-a4fb00f31252"
 							owner-tree="[[ getOwnerTree(treeJson) ]]"
 							path-separator="##">
 						</cosmoz-treenode>
@@ -76,7 +63,9 @@
 					<div>
 						<h2>Alternate template</h2>
 						<cosmoz-treenode
-							node-id='fc78989a-d213-496c-80db-a4fb00f31252'
+							id="alternateTemplate"
+							key-property="id"
+							key-value="fc78989a-d213-496c-80db-a4fb00f31252"
 							owner-tree="[[ getOwnerTree(treeJson) ]]">
 
 							<template>
@@ -90,9 +79,10 @@
 		</div>
 
 		<script>
+			/* global basic */
 
 			basic.getOwnerTree = function (treeJson) {
-				return new Cosmoz.Tree(treeJson);
+				return new Cosmoz.DefaultTree(treeJson);
 			};
 
 		</script>
