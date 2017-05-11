@@ -48,10 +48,10 @@
 		</style>
 
 		<template>
-			<span class$="separator separator[[ index ]]">[[ pathSeparator ]]</span> <span title="[[ value ]]" class="part">[[ value ]]</span>
+			<span class$="separator separator[[ index ]]">[[ pathSeparator ]]</span> <span title$="[[ value ]]" class="part">[[ value ]]</span>
 		</template>
 
-		<span id="ellipsis" hidden$="[[ _hideEllipsis ]]" title="[[ _textPath ]]">[[ ellipsis ]]</span>
+		<span id="ellipsis" hidden$="[[ _hideEllipsis ]]" title$="[[ _textPath ]]">[[ ellipsis ]]</span>
 
 		<slot></slot>
 
@@ -137,6 +137,10 @@
 				_pathToRender: {
 					type: Array,
 					computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
+				},
+
+				_textPath: {
+					type: String
 				}
 			},
 
