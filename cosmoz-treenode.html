@@ -10,27 +10,48 @@
 <dom-module id="cosmoz-treenode">
 	<template>
 		<style>
+			:host {
+				@apply --layout-horizontal;
+				@apply --layout-wrap;
+			}
+
+			:host([no-wrap]) {
+				@apply --layout-no-wrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
 			#ellipsis {
 				margin-right: 0.2em;
+				flex-shrink: 0;
 			}
+
 			::slotted(.separator) {
                 margin: 0 0.2em;
+				flex-shrink: 0;
             }
 
-			::slotted(.separator.separator.sep0) {
-				display: none;
+			::slotted(*) {
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				flex-shrink: 1;
+				overflow: hidden;
 			}
 
-			:slotted(.part) {
-				white-space: nowrap;
+			::slotted(*:last-child) {
+				flex-shrink: 0;
+			}
+
+			::slotted(.separator.separator0) {
+				display: none;
 			}
 		</style>
 
-		<span id="ellipsis" hidden$="[[ !hideFromRoot ]]">[[ ellipsis ]]</span>
-
 		<template>
-			<span class$="separator sep[[ index ]]">[[ pathSeparator ]]</span> <span class="part">[[ value ]]</span>
+			<span class$="separator separator[[ index ]]">[[ pathSeparator ]]</span> <span title="[[ value ]]" class="part">[[ value ]]</span>
 		</template>
+
+		<span id="ellipsis" hidden$="[[ _hideEllipsis ]]" title="[[ _textPath ]]">[[ ellipsis ]]</span>
 
 		<slot></slot>
 
@@ -93,9 +114,19 @@
 					value: 0
 				},
 
+				showMaxNodes: {
+					type: Number,
+					value: 0
+				},
+
 				ellipsis: {
 					type: String,
 					value: '… /'
+				},
+
+				noWrap: {
+					type: Boolean,
+					reflectToAttribute: true
 				},
 
 				_path: {
@@ -105,7 +136,7 @@
 
 				_pathToRender: {
 					type: Array,
-					computed: '_computePathToRender(_path, hideFromRoot)'
+					computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
 				}
 			},
 
@@ -125,11 +156,17 @@
 				this._templateInstances = [];
 			},
 
-			_computePathToRender: function (path, hideFromRoot) {
+			_computePathToRender: function (path, hideFromRoot, showMaxNode) {
+				var pathToRender = path;
 				if (hideFromRoot > 0 && path.length > hideFromRoot) {
-					return path.slice(hideFromRoot);
+					pathToRender = path.slice(hideFromRoot);
 				}
-				return path;
+
+				if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
+					pathToRender = path.slice(-showMaxNode);
+				}
+
+				return pathToRender;
 			},
 
 			_computePath: function (ownerTree, keyProperty, keyValue) {
@@ -152,8 +189,6 @@
 				parent = Polymer.dom(this);
 				this._ensureTemplatized();
 
-				this.$.ellipsis.hidden = pathToRender.length === this._path.length;
-
 				for (i = 0; i < pathToRender.length; i+=1) {
 					node = pathToRender[i];
 					instance = this.stamp();
@@ -163,6 +198,11 @@
 					this._templateInstances.push(instance);
 					parent.appendChild(instance.root);
 				}
+
+				this._hideEllipsis = pathToRender.length === this._path.length;
+				this._textPath = this._path.map(function (node) {
+					return this.ownerTree.getProperty(node, this.valueProperty);
+				}, this).join(this.pathSeparator);
 			},
 
 			_cleanPreviousRender: function () {
@@ -196,7 +236,6 @@
 				}
 			},
 
-
 			_forwardParentProp: function (prop, value) {
 				if (this._templateInstances) {
 					this._templateInstances.forEach(function (inst) {
@@ -212,7 +251,6 @@
 					});
 				}
 			}
-
 		});
 	</script>
 </dom-module>
