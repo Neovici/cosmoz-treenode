@@ -10,27 +10,51 @@
 <dom-module id="cosmoz-treenode">
 	<template>
 		<style>
+			:host {
+				@apply --layout-horizontal;
+				@apply --layout-wrap;
+			}
+
+			:host([no-wrap]) {
+				@apply --layout-no-wrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+
 			#ellipsis {
 				margin-right: 0.2em;
+				flex-shrink: 0;
 			}
-			.separator {
-				margin: 0 0.2em;
-			}
-			.separator.sep0 {
-				display: none;
-			}
-			.part {
+
+			::slotted(.separator) {
+                margin: 0 0.2em;
+				flex-shrink: 0;
+            }
+
+			::slotted(*) {
 				white-space: nowrap;
+				text-overflow: ellipsis;
+				flex-shrink: 1;
+				overflow: hidden;
+			}
+
+			::slotted(*:last-child) {
+				flex-shrink: 0;
+			}
+
+			::slotted(.separator.separator0) {
+				display: none;
 			}
 		</style>
 
-		<span id="ellipsis" hidden$="[[ !hideFromRoot ]]">[[ ellipsis ]]</span>
-		
-		<template is="dom-repeat" items="[[ pathToRender ]]" as="part">
-			<span class$="separator sep[[ index ]]"> [[ pathSeparator ]]</span> <span class="part">[[ part.name ]]</span>
+		<template>
+			<span class$="separator separator[[ index ]]">[[ pathSeparator ]]</span> <span title$="[[ value ]]" class="part">[[ value ]]</span>
 		</template>
 
+		<span id="ellipsis" hidden$="[[ _hideEllipsis ]]" title$="[[ _textPath ]]">[[ ellipsis ]]</span>
+
 		<slot></slot>
+
 	</template>
 	<script>
 		Polymer({
@@ -39,35 +63,41 @@
 			properties: {
 
 				/**
-				 * Generic way to hint about key type, or unknown if we should guess
+				 * Name of the property used to lookup the displayed node in the tree
 				 */
-				keyType: {
+				keyProperty: {
 					type: String,
-					value: 'unknown'
 				},
 
 				/**
-				 * The value for the keyType (nodeId or pathLocator),
-				 * will be reflected to the right property based on keyType
-				 * value or guess
+				 * The value for the `keyProperty` used to lookup the node in the tree.
 				 */
-				keyId: {
+				keyValue: {
 					type: String
-				},
-
-				nodeId: {
-					type: Object,
-					value: null,
-					observer: 'nodeIdChanged'
 				},
 
 				ownerTree: {
 					type: Cosmoz.Tree
 				},
 
-				pathLocator: {
+				indexAs: {
 					type: String,
-					value: null
+					value: 'index'
+				},
+
+				nodeAs: {
+					type: String,
+					value: 'node'
+				},
+
+				valueAs: {
+					type: String,
+					value: 'value'
+				},
+
+				valueProperty: {
+					type: String,
+					value: 'name'
 				},
 
 				pathSeparator: {
@@ -84,66 +114,146 @@
 					value: 0
 				},
 
+				showMaxNodes: {
+					type: Number,
+					value: 0
+				},
+
 				ellipsis: {
 					type: String,
 					value: '… /'
 				},
 
-				pathToRender: {
-					type: Array,
-					computed: 'computePathToRender(_path, hideFromRoot)'
+				noWrap: {
+					type: Boolean,
+					reflectToAttribute: true
 				},
 
 				_path: {
 					type: Array,
-					computed: '_computePath(pathLocator, ownerTree)'
+					computed: '_computePath(ownerTree, keyProperty, keyValue)'
+				},
+
+				_pathToRender: {
+					type: Array,
+					computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
+				},
+
+				_textPath: {
+					type: String
 				}
 			},
 
-			observers: [
-				'_setKey(keyType, keyId)'
+			behaviors: [
+				Polymer.Templatizer
 			],
 
-			computePathToRender: function (path, hideFromRoot) {
-				if (!path || !Array.isArray(path) || path.length < 1) {
-					return;
-				}
-				var pathOffset = this.pathLocator.split('.').length - path.length;
-				return path.filter(function (part, index) {
-					return index + pathOffset >= hideFromRoot;
-				});
+			observers: [
+				'_renderNode(_pathToRender, pathSeparator)'
+			],
+
+			ready: function () {
+				this._instanceProps = {};
+				this._instanceProps[this.nodeAs] = true;
+				this._instanceProps[this.indexAs] = true;
+				this._instanceProps[this.valueAs] = true;
+				this._templateInstances = [];
 			},
 
-			nodeIdChanged: function (newNodeId) {
-				if (!newNodeId || !this.ownerTree) {
-					return;
+			_computePathToRender: function (path, hideFromRoot, showMaxNode) {
+				var pathToRender = path;
+				if (hideFromRoot > 0 && path.length > hideFromRoot) {
+					pathToRender = path.slice(hideFromRoot);
 				}
-				var node = this.ownerTree.findNodeById(newNodeId);
-				if (!node || !node.pathLocator) {
-					return;
+
+				if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
+					pathToRender = path.slice(-showMaxNode);
 				}
-				this.set('pathLocator', node.pathLocator);
+
+				return pathToRender;
 			},
 
-			_setKey: function (keyType, keyId) {
-				if (!keyType) {
+			_computePath: function (ownerTree, keyProperty, keyValue) {
+				return ownerTree.getPathByProperty(keyProperty, keyValue);
+			},
+
+			_renderNode: function (pathToRender) {
+
+				if (!pathToRender || !Array.isArray(pathToRender) || pathToRender.length === 0) {
 					return;
 				}
-				if (keyType === 'unknown') {
-					if (this.ownerTree.isGuid(keyId)) {
-						keyType = 'nodeId';
-					} else {
-						keyType = 'pathLocator';
+
+				var parent,
+					instance,
+					node,
+					i;
+
+				this._cleanPreviousRender();
+
+				parent = Polymer.dom(this);
+				this._ensureTemplatized();
+
+				for (i = 0; i < pathToRender.length; i+=1) {
+					node = pathToRender[i];
+					instance = this.stamp();
+					instance[this.nodeAs] = node;
+					instance[this.indexAs] = i;
+					instance[this.valueAs] = this.ownerTree.getProperty(node, this.valueProperty);
+					this._templateInstances.push(instance);
+					parent.appendChild(instance.root);
+				}
+
+				this._hideEllipsis = pathToRender.length === this._path.length;
+				this._textPath = this._path.map(function (node) {
+					return this.ownerTree.getProperty(node, this.valueProperty);
+				}, this).join(this.pathSeparator);
+			},
+
+			_cleanPreviousRender: function () {
+				var inst,
+					i,
+					j;
+
+				if (this._templateInstances !== undefined && this._templateInstances.length > 0) {
+					for (i = 0; i < this._templateInstances.length; i+=1) {
+						inst = this._templateInstances[i];
+						// TODO(pasleq): not safe to use Templatizer internal property, but seems children is not working on Safari
+						// See Polymer.Templatizer source
+						for (j = 0; j <inst._children.length; j+=1) {
+							// Appending the child to instance instance's root will detach it from it's current location
+							Polymer.dom(inst.root).appendChild(inst._children[j]);
+						}
 					}
+
+					this._templateInstances.splice(0);
 				}
-				this.set(keyType, keyId);
 			},
 
-			_computePath: function (pathLocator, ownerTree) {
-				if (!pathLocator) {
-					return;
+			_ensureTemplatized: function () {
+				if (!this.ctor) {
+					this._nodeTemplate = Polymer.dom(this).querySelector('template');
+					if (this._nodeTemplate === null) {
+						this._nodeTemplate = Polymer.dom(this.root).querySelector('template');
+					}
+
+					this.templatize(this._nodeTemplate);
 				}
-				return ownerTree.getPathByLocator(pathLocator);
+			},
+
+			_forwardParentProp: function (prop, value) {
+				if (this._templateInstances) {
+					this._templateInstances.forEach(function (inst) {
+						inst[prop] = value;
+					}, this);
+				}
+			},
+
+			_forwardParentPath: function (path, value) {
+				if (this._templateInstances) {
+					this._templateInstances.forEach(function (inst) {
+						inst.notifyPath(path, value, true);
+					});
+				}
 			}
 		});
 	</script>
