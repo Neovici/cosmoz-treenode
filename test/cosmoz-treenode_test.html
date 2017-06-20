@@ -102,6 +102,26 @@
 			assert.equal(children[5].textContent, 'Node3');
 		});
 
+		test('reuse template instances', function () {
+			var inst0 = basicFixture._templateInstances[0],
+				inst1 = basicFixture._templateInstances[1],
+				children;
+
+			basicFixture.keyValue = '1.4';
+
+			children = basicFixture.getEffectiveChildren();
+
+			// verfify node 1.4 is rendered
+			assert.equal(children[0].textContent, basicFixture.pathSeparator);
+			assert.equal(children[1].textContent, 'Root');
+			assert.equal(children[2].textContent, basicFixture.pathSeparator);
+			assert.equal(children[3].textContent, 'Node4');
+
+			// verify templates are reused
+			assert.equal(basicFixture._templateInstances[0], inst0);
+			assert.equal(basicFixture._templateInstances[1], inst1);
+		});
+
 	});
 
 	suite('lookupNodeById', function () {

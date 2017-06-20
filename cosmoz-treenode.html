@@ -141,6 +141,11 @@
 
 				_textPath: {
 					type: String
+				},
+
+				_hideEllipsis: {
+					type: Boolean,
+					value: true
 				}
 			},
 
@@ -151,6 +156,8 @@
 			observers: [
 				'_renderNode(_pathToRender, pathSeparator)'
 			],
+
+			_templateInstances: null,
 
 			ready: function () {
 				this._instanceProps = {};
@@ -180,6 +187,7 @@
 			_renderNode: function (pathToRender) {
 
 				if (!pathToRender || !Array.isArray(pathToRender) || pathToRender.length === 0) {
+					this._hideEllipsis = true;
 					return;
 				}
 
@@ -193,13 +201,20 @@
 				parent = Polymer.dom(this);
 				this._ensureTemplatized();
 
+				if (pathToRender.length > this._templateInstances.length) {
+					for (i = this._templateInstances.length; i < pathToRender.length; i++) {
+						this._templateInstances.push(this.stamp());
+					}
+				} else if (pathToRender.length < this._templateInstances.length) {
+					this._templateInstances.splice(pathToRender.length);
+				}
+
 				for (i = 0; i < pathToRender.length; i+=1) {
 					node = pathToRender[i];
-					instance = this.stamp();
+					instance = this._templateInstances[i];
 					instance[this.nodeAs] = node;
 					instance[this.indexAs] = i;
 					instance[this.valueAs] = this.ownerTree.getProperty(node, this.valueProperty);
-					this._templateInstances.push(instance);
 					parent.appendChild(instance.root);
 				}
 
@@ -224,8 +239,6 @@
 							Polymer.dom(inst.root).appendChild(inst._children[j]);
 						}
 					}
-
-					this._templateInstances.splice(0);
 				}
 			},
 
