@@ -91,37 +91,16 @@
 			assert.equal(basicFixture.is, 'cosmoz-treenode');
 		});
 
-		test('renders all path parts', function () {
-			var children = basicFixture.getEffectiveChildren();
-			// TODO(pasleq): how to check the first separator is not visible ?
-			assert.equal(children[0].textContent, basicFixture.pathSeparator);
-			assert.equal(children[1].textContent, 'Root');
-			assert.equal(children[2].textContent, basicFixture.pathSeparator);
-			assert.equal(children[3].textContent, 'Node2');
-			assert.equal(children[4].textContent, basicFixture.pathSeparator);
-			assert.equal(children[5].textContent, 'Node3');
+		test('renders path', function () {
+			var textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, 'Root/Node2/Node3/Node301');
 		});
 
-		test('reuse template instances', function () {
-			var inst0 = basicFixture._templateInstances[0],
-				inst1 = basicFixture._templateInstances[1],
-				children;
-
-			basicFixture.keyValue = '1.4';
-
-			children = basicFixture.getEffectiveChildren();
-
-			// verfify node 1.4 is rendered
-			assert.equal(children[0].textContent, basicFixture.pathSeparator);
-			assert.equal(children[1].textContent, 'Root');
-			assert.equal(children[2].textContent, basicFixture.pathSeparator);
-			assert.equal(children[3].textContent, 'Node4');
-
-			// verify templates are reused
-			assert.equal(basicFixture._templateInstances[0], inst0);
-			assert.equal(basicFixture._templateInstances[1], inst1);
+		test('uses pathSeparator', function () {
+			basicFixture.pathSeparator = '#';
+			var textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, 'Root#Node2#Node3#Node301');
 		});
-
 	});
 
 	suite('lookupNodeById', function () {
@@ -141,15 +120,9 @@
 			basicFixture.ownerTree = basicTree;
 		});
 
-		test('renders all path parts', function () {
-			var children = basicFixture.getEffectiveChildren();
-			// TODO(pasleq): how to check the first separator is not visible ?
-			assert.equal(children[0].textContent, basicFixture.pathSeparator);
-			assert.equal(children[1].textContent, 'Root');
-			assert.equal(children[2].textContent, basicFixture.pathSeparator);
-			assert.equal(children[3].textContent, 'Node2');
-			assert.equal(children[4].textContent, basicFixture.pathSeparator);
-			assert.equal(children[5].textContent, 'Node3');
+		test('renders path', function () {
+			var textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, 'Root/Node2/Node3');
 		});
 
 	});
@@ -170,13 +143,9 @@
 			multiRootFixture.ownerTree = multiRootTree;
 		});
 
-		test('renders all path parts', function () {
-			var children = multiRootFixture.getEffectiveChildren();
-			// TODO(pasleq): how to check the first separator is not visible ?
-			assert.equal(children[0].textContent, multiRootFixture.pathSeparator);
-			assert.equal(children[1].textContent, 'Node2');
-			assert.equal(children[2].textContent, multiRootFixture.pathSeparator);
-			assert.equal(children[3].textContent, 'Node3');
+		test('renders path', function () {
+			var textContent = multiRootFixture.textContent.trim();
+			assert.equal(textContent, 'Node2/Node3');
 		});
 
 	});
@@ -199,12 +168,8 @@
 		});
 
 		test('renders all path parts', function () {
-			var children = missingAncestorFixture.getEffectiveChildren();
-			// TODO(pasleq): how to check the first separator is not visible ?
-			assert.equal(children[0].textContent, missingAncestorFixture.pathSeparator);
-			assert.equal(children[1].textContent, 'Node301');
-			assert.equal(children[2].textContent, missingAncestorFixture.pathSeparator);
-			assert.equal(children[3].textContent, 'Node401');
+			var textContent = missingAncestorFixture.textContent.trim();
+			assert.equal(textContent, 'Node301/Node401');
 		});
 
 	});
