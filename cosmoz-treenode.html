@@ -116,6 +116,9 @@
 				var path = null,
 					node,
 					i;
+				if (!ownerTree) {
+					return;
+				}
 
 				if (keyProperty === 'pathLocator') {
 					path = ownerTree.getPathNodes(keyValue);
