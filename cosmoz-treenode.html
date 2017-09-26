@@ -97,66 +97,67 @@
 			},
 
 			_computePathToRender: function (path, hideFromRoot, showMaxNode) {
-				if (! (path === undefined || hideFromRoot === undefined || showMaxNode === undefined)) {
-					var pathToRender = path;
-					if (hideFromRoot > 0 && path.length > hideFromRoot) {
-						pathToRender = path.slice(hideFromRoot);
-					}
-
-					if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
-						pathToRender = path.slice(-showMaxNode);
-					}
-
-					return pathToRender;
+				if (!path){
+					return;
 				}
+				var pathToRender = path;
+				if (hideFromRoot > 0 && path.length > hideFromRoot) {
+					pathToRender = path.slice(hideFromRoot);
+				}
+
+				if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
+					pathToRender = path.slice(-showMaxNode);
+				}
+
+				return pathToRender;
 			},
 
 			_computePath: function (ownerTree, keyProperty, keyValue) {
 				// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-				if (! (ownerTree === undefined || keyProperty === undefined || keyValue === undefined)) {
-					var path = null,
-						node,
-						i;
-					if (!ownerTree) {
-						return;
-					}
+				var path = null,
+					node,
+					i;
 
-					if (keyProperty === 'pathLocator') {
-						path = ownerTree.getPathNodes(keyValue);
-					} else {
-						node = ownerTree.getNodeByProperty(keyValue, keyProperty);
-						if (node && node.pathLocator) {
-							path = ownerTree.getPathNodes(node.pathLocator);
-						}
-					}
-					if (path !== null && path.length) {
-						for (i = path.length - 1; i >= 0; i--) {
-							if (path[i] === undefined) {
-								path.splice(0, i + 1);
-								if (path.length === 0) {
-									path = null;
-								}
-								break;
-							}
-						}
-					}
-
-					return path;
+				if (!ownerTree) {
+					return;
 				}
+
+				if (keyProperty === 'pathLocator') {
+					path = ownerTree.getPathNodes(keyValue);
+				} else {
+					node = ownerTree.getNodeByProperty(keyValue, keyProperty);
+					if (node && node.pathLocator) {
+						path = ownerTree.getPathNodes(node.pathLocator);
+					}
+				}
+				if (path !== null && path.length) {
+					for (i = path.length - 1; i >= 0; i--) {
+						if (path[i] === undefined) {
+							path.splice(0, i + 1);
+							if (path.length === 0) {
+								path = null;
+							}
+							break;
+						}
+					}
+				}
+
+				return path;
 			},
 
 			_computePathText: function (pathToRender, valueProperty, pathSeparator) {
-				if (! (pathToRender === undefined || valueProperty === undefined || valueProperty === undefined)) {
-					var text = pathToRender.map(function (node) {
-						return this.ownerTree.getProperty(node, valueProperty);
-					}, this).join(pathSeparator);
-
-					if (pathToRender.length < this._path.length) {
-						text = this.ellipsis + text;
-					}
-
-					return text;
+				if (!pathToRender){
+					return;
 				}
+				var text = pathToRender.map(function (node) {
+					return this.ownerTree.getProperty(node, valueProperty);
+				}, this).join(pathSeparator);
+
+				if (pathToRender.length < this._path.length) {
+					text = this.ellipsis + text;
+				}
+
+				return text;
 			},
 		});
 	</script>
