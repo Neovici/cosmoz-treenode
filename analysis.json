@@ -1,0 +1,507 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "`cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure",
+      "summary": "",
+      "path": "cosmoz-treenode.html",
+      "properties": [
+        {
+          "name": "keyProperty",
+          "type": "string",
+          "description": "Name of the property used to lookup the displayed node in the tree",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 32,
+              "column": 4
+            },
+            "end": {
+              "line": 34,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "keyValue",
+          "type": "string",
+          "description": "The value for the `keyProperty` used to lookup the node in the tree.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 39,
+              "column": 4
+            },
+            "end": {
+              "line": 41,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "ownerTree",
+          "type": "Cosmoz.Tree",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 4
+            },
+            "end": {
+              "line": 45,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "valueProperty",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 47,
+              "column": 4
+            },
+            "end": {
+              "line": 50,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"name\""
+        },
+        {
+          "name": "pathSeparator",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 52,
+              "column": 4
+            },
+            "end": {
+              "line": 55,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"/\""
+        },
+        {
+          "name": "hideFromRoot",
+          "type": "number",
+          "description": "Represent a number of nodes that should not be rendered starting from root.\nIf the path to the displayed node has less nodes than this number, then nothing is hidden.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 61,
+              "column": 4
+            },
+            "end": {
+              "line": 64,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "showMaxNodes",
+          "type": "number",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 66,
+              "column": 4
+            },
+            "end": {
+              "line": 69,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "0"
+        },
+        {
+          "name": "ellipsis",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 4
+            },
+            "end": {
+              "line": 74,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"…/\""
+        },
+        {
+          "name": "noWrap",
+          "type": "boolean",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 76,
+              "column": 4
+            },
+            "end": {
+              "line": 79,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_path",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 81,
+              "column": 4
+            },
+            "end": {
+              "line": 84,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "_pathToRender",
+          "type": "Array",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 86,
+              "column": 4
+            },
+            "end": {
+              "line": 89,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        },
+        {
+          "name": "_pathText",
+          "type": "string",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 91,
+              "column": 4
+            },
+            "end": {
+              "line": 94,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "readOnly": true
+            }
+          }
+        }
+      ],
+      "methods": [
+        {
+          "name": "_computePathToRender",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 98,
+              "column": 3
+            },
+            "end": {
+              "line": 109,
+              "column": 4
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "path"
+            },
+            {
+              "name": "hideFromRoot"
+            },
+            {
+              "name": "showMaxNode"
+            }
+          ]
+        },
+        {
+          "name": "_computePath",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 111,
+              "column": 3
+            },
+            "end": {
+              "line": 142,
+              "column": 4
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "ownerTree"
+            },
+            {
+              "name": "keyProperty"
+            },
+            {
+              "name": "keyValue"
+            }
+          ]
+        },
+        {
+          "name": "_computePathText",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 144,
+              "column": 3
+            },
+            "end": {
+              "line": 154,
+              "column": 4
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "pathToRender"
+            },
+            {
+              "name": "valueProperty"
+            },
+            {
+              "name": "pathSeparator"
+            }
+          ]
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 24,
+          "column": 10
+        },
+        "end": {
+          "line": 155,
+          "column": 3
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "attributes": [
+        {
+          "name": "key-property",
+          "description": "Name of the property used to lookup the displayed node in the tree",
+          "sourceRange": {
+            "start": {
+              "line": 32,
+              "column": 4
+            },
+            "end": {
+              "line": 34,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "key-value",
+          "description": "The value for the `keyProperty` used to lookup the node in the tree.",
+          "sourceRange": {
+            "start": {
+              "line": 39,
+              "column": 4
+            },
+            "end": {
+              "line": 41,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "owner-tree",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 43,
+              "column": 4
+            },
+            "end": {
+              "line": 45,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "Cosmoz.Tree"
+        },
+        {
+          "name": "value-property",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 47,
+              "column": 4
+            },
+            "end": {
+              "line": 50,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "path-separator",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 52,
+              "column": 4
+            },
+            "end": {
+              "line": 55,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "hide-from-root",
+          "description": "Represent a number of nodes that should not be rendered starting from root.\nIf the path to the displayed node has less nodes than this number, then nothing is hidden.",
+          "sourceRange": {
+            "start": {
+              "line": 61,
+              "column": 4
+            },
+            "end": {
+              "line": 64,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "show-max-nodes",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 66,
+              "column": 4
+            },
+            "end": {
+              "line": 69,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "ellipsis",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 71,
+              "column": 4
+            },
+            "end": {
+              "line": 74,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "no-wrap",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 76,
+              "column": 4
+            },
+            "end": {
+              "line": 79,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "cosmoz-treenode"
+    }
+  ]
+}
