@@ -92,14 +92,16 @@
 		});
 
 		test('renders path', function () {
-			var textContent = basicFixture.textContent.trim();
-			assert.equal(textContent, 'Root/Node2/Node3/Node301');
+			const sep = basicFixture.pathSeparator,
+				textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, ['Root','Node2','Node3','Node301'].join(sep));
 		});
 
 		test('uses pathSeparator', function () {
-			basicFixture.pathSeparator = '#';
-			var textContent = basicFixture.textContent.trim();
-			assert.equal(textContent, 'Root#Node2#Node3#Node301');
+			const customSep = '#';
+			basicFixture.pathSeparator = customSep;
+			const textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, ['Root','Node2','Node3','Node301'].join(customSep));
 		});
 	});
 
@@ -121,8 +123,9 @@
 		});
 
 		test('renders path', function () {
-			var textContent = basicFixture.textContent.trim();
-			assert.equal(textContent, 'Root/Node2/Node3');
+			const sep = basicFixture.pathSeparator,
+				textContent = basicFixture.textContent.trim();
+			assert.equal(textContent, ['Root','Node2','Node3'].join(sep));
 		});
 
 	});
@@ -144,8 +147,9 @@
 		});
 
 		test('renders path', function () {
-			var textContent = multiRootFixture.textContent.trim();
-			assert.equal(textContent, 'Node2/Node3');
+			const sep = multiRootFixture.pathSeparator,
+				textContent = multiRootFixture.textContent.trim();
+			assert.equal(textContent, ['Node2','Node3'].join(sep));
 		});
 
 	});
@@ -168,8 +172,9 @@
 		});
 
 		test('renders all path parts', function () {
-			var textContent = missingAncestorFixture.textContent.trim();
-			assert.equal(textContent, 'Node301/Node401');
+			const sep = missingAncestorFixture.pathSeparator,
+				textContent = missingAncestorFixture.textContent.trim();
+			assert.equal(textContent, ['Node301','Node401'].join(sep));
 		});
 
 	});
