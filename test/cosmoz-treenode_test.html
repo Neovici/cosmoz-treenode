@@ -95,14 +95,14 @@
 
 		test('renders path', function () {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.textContent.trim();
+				textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(sep));
 		});
 
 		test('uses pathSeparator', function () {
 			const customSep = '#';
 			basicFixture.pathSeparator = customSep;
-			var textContent = basicFixture.textContent.trim();
+			var textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
 		});
 	});
@@ -126,7 +126,7 @@
 
 		test('renders path', function () {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.textContent.trim();
+				textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3'].join(sep));
 		});
 
@@ -150,7 +150,7 @@
 
 		test('renders path', function () {
 			const sep = multiRootFixture.pathSeparator,
-				textContent = multiRootFixture.textContent.trim();
+				textContent = multiRootFixture.$$('span').textContent;
 			assert.equal(textContent, ['Node2', 'Node3'].join(sep));
 		});
 
@@ -175,7 +175,7 @@
 
 		test('renders all path parts', function () {
 			const sep = missingAncestorFixture.pathSeparator,
-				textContent = missingAncestorFixture.textContent.trim();
+				textContent = missingAncestorFixture.$$('span').textContent;
 			assert.equal(textContent, ['Node301', 'Node401'].join(sep));
 		});
 
