@@ -8,9 +8,13 @@
 
 	<script src="../../webcomponentsjs/webcomponents-lite.js"></script>
 	<script src="../../web-component-tester/browser.js"></script>
+	<script src="../../test-fixture/test-fixture-mocha.js"></script>
 
-	<link rel="import" href="../../cosmoz-tree/cosmoz-default-tree.html">
+	<link rel="import" href="../../test-fixture/test-fixture.html">
+	<link rel="import" href="../../iron-test-helpers/iron-test-helpers.html">
+
 	<link rel="import" href="../cosmoz-treenode.html">
+	<link rel="import" href="../../cosmoz-tree/cosmoz-default-tree.html">
 	<link rel="import" href="../../iron-ajax/iron-ajax.html">
 </head>
 <body>
@@ -68,8 +72,6 @@
 	</test-fixture>
 
 	<script>
-	/*global suite, fixture, setup, suiteSetup, test, Polymer, assert */
-
 	suite('basic', function () {
 		var basicFixture,
 			basicTree;
@@ -93,14 +95,14 @@
 
 		test('renders path', function () {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.textContent.trim();
+				textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(sep));
 		});
 
 		test('uses pathSeparator', function () {
 			const customSep = '#';
 			basicFixture.pathSeparator = customSep;
-			var textContent = basicFixture.textContent.trim();
+			var textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
 		});
 	});
@@ -124,7 +126,7 @@
 
 		test('renders path', function () {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.textContent.trim();
+				textContent = basicFixture.$$('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3'].join(sep));
 		});
 
@@ -148,7 +150,7 @@
 
 		test('renders path', function () {
 			const sep = multiRootFixture.pathSeparator,
-				textContent = multiRootFixture.textContent.trim();
+				textContent = multiRootFixture.$$('span').textContent;
 			assert.equal(textContent, ['Node2', 'Node3'].join(sep));
 		});
 
@@ -173,7 +175,7 @@
 
 		test('renders all path parts', function () {
 			const sep = missingAncestorFixture.pathSeparator,
-				textContent = missingAncestorFixture.textContent.trim();
+				textContent = missingAncestorFixture.$$('span').textContent;
 			assert.equal(textContent, ['Node301', 'Node401'].join(sep));
 		});
 

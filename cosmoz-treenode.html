@@ -1,5 +1,4 @@
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../cosmoz-tree/cosmoz-tree.html">
 
 <!--
@@ -98,6 +97,9 @@
 			},
 
 			_computePathToRender: function (path, hideFromRoot, showMaxNode) {
+				if (!path) {
+					return;
+				}
 				var pathToRender = path;
 				if (hideFromRoot > 0 && path.length > hideFromRoot) {
 					pathToRender = path.slice(hideFromRoot);
@@ -112,10 +114,10 @@
 
 			_computePath: function (ownerTree, keyProperty, keyValue) {
 				// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-
 				var path = null,
 					node,
 					i;
+
 				if (!ownerTree) {
 					return;
 				}
@@ -144,6 +146,9 @@
 			},
 
 			_computePathText: function (pathToRender, valueProperty, pathSeparator) {
+				if (!pathToRender) {
+					return;
+				}
 				var text = pathToRender.map(function (node) {
 					return this.ownerTree.getProperty(node, valueProperty);
 				}, this).join(pathSeparator);
