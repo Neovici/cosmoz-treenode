@@ -130,7 +130,7 @@
 						path = ownerTree.getPathNodes(node.pathLocator);
 					}
 				}
-				if (path !== null && path.length) {
+				if (Array.isArray(path) && path.length) {
 					for (i = path.length - 1; i >= 0; i--) {
 						if (path[i] === undefined) {
 							path.splice(0, i + 1);
