@@ -118,7 +118,7 @@
 					node,
 					i;
 
-				if (!ownerTree) {
+				if (!ownerTree || keyProperty == null || keyValue === undefined) {
 					return;
 				}
 
