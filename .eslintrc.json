@@ -11,6 +11,9 @@
 		"Polymer": false,
 		"WeakMap": false
 	},
+	"parserOptions": {
+		"ecmaVersion": 6
+	},
 	"plugins": [
 		"html"
 	],
@@ -19,6 +22,14 @@
 		"array-bracket-spacing": [
 			"error",
 			"never"
+		],
+		"arrow-parens": [
+			"error",
+			"as-needed"
+		],
+		"arrow-spacing": [
+			"error",
+			{ "before": true, "after": true }
 		],
 		"brace-style": "error",
 		"camelcase": "error",
@@ -36,7 +47,10 @@
 			"error",
 			"all"
 		],
-		"eqeqeq": "error",
+		"eqeqeq": [
+			"error",
+			"smart"
+		],
 		"guard-for-in": "error",
 		"indent": [
 			"error",
