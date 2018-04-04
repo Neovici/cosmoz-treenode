@@ -96,11 +96,11 @@
 
 			},
 
-			_computePathToRender: function (path, hideFromRoot, showMaxNode) {
+			_computePathToRender(path, hideFromRoot, showMaxNode) {
 				if (!path) {
 					return;
 				}
-				var pathToRender = path;
+				let pathToRender = path;
 				if (hideFromRoot > 0 && path.length > hideFromRoot) {
 					pathToRender = path.slice(hideFromRoot);
 				}
@@ -112,9 +112,9 @@
 				return pathToRender;
 			},
 
-			_computePath: function (ownerTree, keyProperty, keyValue) {
+			_computePath(ownerTree, keyProperty, keyValue) {
 				// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-				var path = null,
+				let path = null,
 					node,
 					i;
 
@@ -141,24 +141,23 @@
 						}
 					}
 				}
-
 				return path;
 			},
 
-			_computePathText: function (pathToRender, valueProperty, pathSeparator) {
+			_computePathText(pathToRender, valueProperty, pathSeparator) {
 				if (!pathToRender) {
 					return;
 				}
-				var text = pathToRender.map(function (node) {
+				let text = pathToRender.map(node => {
 					return this.ownerTree.getProperty(node, valueProperty);
-				}, this).join(pathSeparator);
+				}).join(pathSeparator);
 
 				if (pathToRender.length < this._path.length) {
 					text = this.ellipsis + text;
 				}
 
 				return text;
-			},
+			}
 		});
 	</script>
 </dom-module>
