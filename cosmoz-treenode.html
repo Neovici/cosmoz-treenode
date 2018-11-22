@@ -1,10 +1,10 @@
-<link rel="import" href="../polymer/polymer.html">
+
 <link rel="import" href="../cosmoz-tree/cosmoz-tree.html">
-
+<link rel="import" href="../polymer/polymer-element.html">
 <!--
-`cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
+	`cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
 
-@demo demo/index.html
+	@demo demo/index.html
 -->
 <dom-module id="cosmoz-treenode">
 	<template>
@@ -22,79 +22,82 @@
 		<span>[[ _pathText ]]</span>
 	</template>
 	<script>
-		Polymer({
-			is: 'cosmoz-treenode',
+		class CosmozTreenode extends Polymer.Element {
+			static get is() {
+				return 'cosmoz-treenode';
+			}
+			static get properties() {
+				return {
 
-			properties: {
+					/**
+					* Name of the property used to lookup the displayed node in the tree
+					*/
+					keyProperty: {
+						type: String,
+					},
 
-				/**
-				 * Name of the property used to lookup the displayed node in the tree
-				 */
-				keyProperty: {
-					type: String,
-				},
+					/**
+					* The value for the `keyProperty` used to lookup the node in the tree.
+					*/
+					keyValue: {
+						type: String
+					},
 
-				/**
-				 * The value for the `keyProperty` used to lookup the node in the tree.
-				 */
-				keyValue: {
-					type: String
-				},
+					ownerTree: {
+						type: Cosmoz.Tree
+					},
 
-				ownerTree: {
-					type: Cosmoz.Tree
-				},
+					valueProperty: {
+						type: String,
+						value: 'name'
+					},
 
-				valueProperty: {
-					type: String,
-					value: 'name'
-				},
+					pathSeparator: {
+						type: String,
+						value: ' / '
+					},
 
-				pathSeparator: {
-					type: String,
-					value: ' / '
-				},
+					/**
+					* Represent a number of nodes that should not be rendered starting from root.
+					* If the path to the displayed node has less nodes than this number, then nothing is hidden.
+					*/
+					hideFromRoot: {
+						type: Number,
+						value: 0
+					},
 
-				/**
-				 * Represent a number of nodes that should not be rendered starting from root.
-				 * If the path to the displayed node has less nodes than this number, then nothing is hidden.
-				 */
-				hideFromRoot: {
-					type: Number,
-					value: 0
-				},
+					showMaxNodes: {
+						type: Number,
+						value: 0
+					},
 
-				showMaxNodes: {
-					type: Number,
-					value: 0
-				},
+					ellipsis: {
+						type: String,
+						value: '… / '
+					},
 
-				ellipsis: {
-					type: String,
-					value: '… / '
-				},
+					noWrap: {
+						type: Boolean,
+						reflectToAttribute: true
+					},
 
-				noWrap: {
-					type: Boolean,
-					reflectToAttribute: true
-				},
+					_path: {
+						type: Array,
+						computed: '_computePath(ownerTree, keyProperty, keyValue)'
+					},
 
-				_path: {
-					type: Array,
-					computed: '_computePath(ownerTree, keyProperty, keyValue)'
-				},
+					_pathToRender: {
+						type: Array,
+						computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
+					},
 
-				_pathToRender: {
-					type: Array,
-					computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
-				},
+					_pathText: {
+						type: String,
+						computed: '_computePathText(_pathToRender, valueProperty, pathSeparator)'
+					},
 
-				_pathText: {
-					type: String,
-					computed: '_computePathText(_pathToRender, valueProperty, pathSeparator)'
-				},
-
-			},
+				};
+			}
 
 			_computePathToRender(path, hideFromRoot, showMaxNode) {
 				if (!path) {
@@ -104,19 +107,18 @@
 				if (hideFromRoot > 0 && path.length > hideFromRoot) {
 					pathToRender = path.slice(hideFromRoot);
 				}
-
+				
 				if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
 					pathToRender = path.slice(-showMaxNode);
 				}
-
 				return pathToRender;
-			},
+			}
 
 			_computePath(ownerTree, keyProperty, keyValue) {
 				// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
 				let path = null,
-					node,
-					i;
+				node,
+				i;
 
 				if (!ownerTree || keyProperty == null || keyValue === undefined) {
 					return;
@@ -142,7 +144,7 @@
 					}
 				}
 				return path;
-			},
+			}
 
 			_computePathText(pathToRender, valueProperty, pathSeparator) {
 				if (!pathToRender) {
@@ -155,9 +157,9 @@
 				if (pathToRender.length < this._path.length) {
 					text = this.ellipsis + text;
 				}
-
 				return text;
 			}
-		});
+		}
+		customElements.define(CosmozTreenode.is, CosmozTreenode);
 	</script>
 </dom-module>
