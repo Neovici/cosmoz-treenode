@@ -107,7 +107,7 @@
 				if (hideFromRoot > 0 && path.length > hideFromRoot) {
 					pathToRender = path.slice(hideFromRoot);
 				}
-				
+
 				if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
 					pathToRender = path.slice(-showMaxNode);
 				}
@@ -117,8 +117,8 @@
 			_computePath(ownerTree, keyProperty, keyValue) {
 				// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
 				let path = null,
-				node,
-				i;
+					node,
+					i;
 
 				if (!ownerTree || keyProperty == null || keyValue === undefined) {
 					return;
