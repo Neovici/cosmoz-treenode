@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 
 	<title>cosmoz-treenode test</title>
 
@@ -72,110 +72,110 @@
 	</test-fixture>
 
 	<script>
-	suite('basic', function () {
-		var basicFixture,
+	suite('basic', () => {
+		let basicFixture,
 			basicTree;
 
-		suiteSetup(function (done) {
-			var basicTreeFixture = fixture('basicTree');
-			basicTreeFixture.addEventListener('response', function () {
+		suiteSetup(done => {
+			let basicTreeFixture = fixture('basicTree');
+			basicTreeFixture.addEventListener('response', () => {
 				basicTree = new Cosmoz.DefaultTree(basicTreeFixture.lastResponse);
 				done();
 			});
 		});
 
-		setup(function () {
+		setup(() => {
 			basicFixture = fixture('basic');
 			basicFixture.ownerTree = basicTree;
 		});
 
-		test('instantiating the element works', function () {
-			assert.equal(basicFixture.is, 'cosmoz-treenode');
+		test('instantiating the element works', () => {
+			assert.equal(basicFixture.tagName, 'COSMOZ-TREENODE');
 		});
 
-		test('renders path', function () {
+		test('renders path', () => {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.$$('span').textContent;
+				textContent = basicFixture.shadowRoot.querySelector('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(sep));
 		});
 
-		test('uses pathSeparator', function () {
+		test('uses pathSeparator', () => {
 			const customSep = '#';
 			basicFixture.pathSeparator = customSep;
-			var textContent = basicFixture.$$('span').textContent;
+			let textContent = basicFixture.shadowRoot.querySelector('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
 		});
 	});
 
-	suite('lookupNodeById', function () {
-		var basicFixture,
+	suite('lookupNodeById', () => {
+		let basicFixture,
 			basicTree;
 
-		suiteSetup(function (done) {
-			var basicTreeFixture = fixture('basicTree');
-			basicTreeFixture.addEventListener('response', function () {
+		suiteSetup(done => {
+			const basicTreeFixture = fixture('basicTree');
+			basicTreeFixture.addEventListener('response', () => {
 				basicTree = new Cosmoz.DefaultTree(basicTreeFixture.lastResponse);
 				done();
 			});
 		});
 
-		setup(function () {
+		setup(() => {
 			basicFixture = fixture('lookupNodeById');
 			basicFixture.ownerTree = basicTree;
 		});
 
-		test('renders path', function () {
+		test('renders path', () => {
 			const sep = basicFixture.pathSeparator,
-				textContent = basicFixture.$$('span').textContent;
+				textContent = basicFixture.shadowRoot.querySelector('span').textContent;
 			assert.equal(textContent, ['Root', 'Node2', 'Node3'].join(sep));
 		});
 
 	});
-	suite('multiRoot', function () {
-		var multiRootFixture,
+	suite('multiRoot', () => {
+		let multiRootFixture,
 			multiRootTree;
 
-		suiteSetup(function (done) {
-			var treeFixture = fixture('multiRootTree');
-			treeFixture.addEventListener('response', function () {
+		suiteSetup(done => {
+			const treeFixture = fixture('multiRootTree');
+			treeFixture.addEventListener('response', () => {
 				multiRootTree = new Cosmoz.DefaultTree(treeFixture.lastResponse);
 				done();
 			});
 		});
 
-		setup(function () {
+		setup(() => {
 			multiRootFixture = fixture('multiRoot');
 			multiRootFixture.ownerTree = multiRootTree;
 		});
 
-		test('renders path', function () {
+		test('renders path', () => {
 			const sep = multiRootFixture.pathSeparator,
-				textContent = multiRootFixture.$$('span').textContent;
+				textContent = multiRootFixture.shadowRoot.querySelector('span').textContent;
 			assert.equal(textContent, ['Node2', 'Node3'].join(sep));
 		});
 
 	});
 
-	suite('missingAncestor', function () {
-		var missingAncestorFixture,
+	suite('missingAncestor', () => {
+		let missingAncestorFixture,
 			missingAncestorTree;
 
-		suiteSetup(function (done) {
-			var treeFixture = fixture('missingAncestorTree');
-			treeFixture.addEventListener('response', function () {
+		suiteSetup(done => {
+			const treeFixture = fixture('missingAncestorTree');
+			treeFixture.addEventListener('response', () => {
 				missingAncestorTree = new Cosmoz.DefaultTree(treeFixture.lastResponse);
 				done();
 			});
 		});
 
-		setup(function () {
+		setup(() => {
 			missingAncestorFixture = fixture('missingAncestor');
 			missingAncestorFixture.ownerTree = missingAncestorTree;
 		});
 
-		test('renders all path parts', function () {
+		test('renders all path parts', () => {
 			const sep = missingAncestorFixture.pathSeparator,
-				textContent = missingAncestorFixture.$$('span').textContent;
+				textContent = missingAncestorFixture.shadowRoot.querySelector('span').textContent;
 			assert.equal(textContent, ['Node301', 'Node401'].join(sep));
 		});
 
