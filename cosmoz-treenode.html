@@ -8,12 +8,13 @@
 <dom-module id="cosmoz-treenode">
 	<script>
 	(() => {
-		const {
-			Element,
-			html
-		} = Polymer;
+		const { html } = Polymer;
 
-		class CosmozTreenode extends Element {
+		/**
+		 * @polymer
+		 * @customElement
+		 */
+		class CosmozTreenode extends Polymer.Element {
 			static get is() {
 				return 'cosmoz-treenode';
 			}
