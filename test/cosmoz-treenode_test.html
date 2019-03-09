@@ -93,6 +93,26 @@
 			assert.equal(basicFixture.tagName, 'COSMOZ-TREENODE');
 		});
 
+		test('_computePath', () => {
+			assert.equal(basicFixture._computePath(), undefined);
+			assert.deepEqual(
+				basicFixture._computePath(basicTree, 'id', '11111111-1111-1111-1111-111111111111'),
+				basicTree.getPathNodes('1')
+			);
+			assert.deepEqual(
+				basicFixture._computePath(basicTree, 'id', '3a7654f1-e3e6-49c7-b6a8-a4fb00f31245'),
+				basicTree.getPathNodes('1.2.3')
+			);
+			assert.equal(basicFixture._computePath(new Cosmoz.DefaultTree({}), 'id', '11111111-1111-1111-1111-111111111111'), null);
+		});
+
+		test('_computePathToRender', () => {
+			assert.equal(basicFixture._computePathToRender(), undefined);
+			assert.deepEqual(basicFixture._computePathToRender(['a', 'b', 'c', 'd'], 2), ['c', 'd']);
+			assert.deepEqual(basicFixture._computePathToRender(['a', 'b', 'c', 'd'], 1), ['b', 'c', 'd']);
+			assert.deepEqual(basicFixture._computePathToRender(['a', 'b', 'c', 'd'], 1, 1), ['d']);
+		});
+
 		test('renders path', () => {
 			const sep = basicFixture.pathSeparator,
 				textContent = basicFixture.shadowRoot.querySelector('span').textContent;
