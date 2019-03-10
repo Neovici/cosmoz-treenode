@@ -7,9 +7,6 @@
 -->
 <dom-module id="cosmoz-treenode">
 	<script>
-	(() => {
-		const { html } = Polymer;
-
 		/**
 		 * @polymer
 		 * @customElement
@@ -20,7 +17,7 @@
 			}
 
 			static get template() {
-				return html`
+				return Polymer.html`
 					<style>
 						:host {
 							display: block;
@@ -171,6 +168,5 @@
 			}
 		}
 		customElements.define(CosmozTreenode.is, CosmozTreenode);
-	})();
 	</script>
 </dom-module>
