@@ -1,4 +1,3 @@
-
 <link rel="import" href="../cosmoz-tree/cosmoz-tree.html">
 <link rel="import" href="../polymer/polymer-element.html">
 <!--
@@ -7,25 +6,33 @@
 	@demo demo/index.html
 -->
 <dom-module id="cosmoz-treenode">
-	<template>
-		<style>
-			:host {
-				display: block;
-			}
-
-			:host([no-wrap]) {
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		</style>
-		<span>[[ _pathText ]]</span>
-	</template>
 	<script>
+		/**
+		 * @polymer
+		 * @customElement
+		 */
 		class CosmozTreenode extends Polymer.Element {
 			static get is() {
 				return 'cosmoz-treenode';
 			}
+
+			static get template() {
+				return Polymer.html`
+					<style>
+						:host {
+							display: block;
+						}
+
+						:host([no-wrap]) {
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+						}
+					</style>
+					<span>[[ _pathText ]]</span>
+				`;
+			}
+
 			static get properties() {
 				return {
 

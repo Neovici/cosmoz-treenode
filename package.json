@@ -7,13 +7,13 @@
 		"test": "test"
 	},
 	"devDependencies": {
-		"eslint": "^5.9.0",
-		"eslint-plugin-html": "^5.0.0",
-		"eslint-plugin-mocha": "^5.2.0",
-		"polymer-cli": "^1.9.1",
+		"eslint": "^5.15.1",
+		"eslint-plugin-html": "^5.0.3",
+		"eslint-plugin-mocha": "^5.3.0",
+		"polymer-cli": "^1.9.7",
 		"web-component-tester-istanbul": "Neovici/web-component-tester-istanbul"
 	},
-	"scripts": {		
+	"scripts": {
 		"start": "polymer serve -o",
 		"preinstall": "rm -f package-lock.json",
 		"postinstall": "polymer install && yarn sync-npm",
