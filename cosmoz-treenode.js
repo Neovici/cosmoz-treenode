@@ -122,9 +122,7 @@ class CosmozTreenode extends PolymerElement {
 	/* eslint-disable-next-line max-statements */
 	_computePath(ownerTree, keyProperty, keyValue) {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-		let path = null,
-			node,
-			i;
+		let path = null;
 
 		if (!ownerTree || keyProperty == null || keyValue === undefined) {
 			return;
@@ -133,13 +131,13 @@ class CosmozTreenode extends PolymerElement {
 		if (keyProperty === 'pathLocator') {
 			path = ownerTree.getPathNodes(keyValue);
 		} else {
-			node = ownerTree.getNodeByProperty(keyValue, keyProperty);
+			const node = ownerTree.getNodeByProperty(keyValue, keyProperty);
 			if (node && node.pathLocator) {
 				path = ownerTree.getPathNodes(node.pathLocator);
 			}
 		}
 		if (Array.isArray(path) && path.length) {
-			for (i = path.length - 1; i >= 0; i--) {
+			for (let i = path.length - 1; i >= 0; i--) {
 				if (path[i] === undefined) {
 					path.splice(0, i + 1);
 					if (path.length === 0) {
