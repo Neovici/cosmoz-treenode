@@ -17,6 +17,6 @@ jobs:
         version: 10.x
     - name: Build
       run: |
-        npm ci
+        npm install
         npm run test
         npm run build --if-present
