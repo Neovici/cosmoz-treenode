@@ -1,7 +1,6 @@
 import { Tree } from '@neovici/cosmoz-tree';
 
-import { PolymerElement } from '@polymer/polymer/polymer-element';
-import { html } from '@polymer/polymer/lib/utils/html-tag';
+import { LitElement, html } from 'lit-element';
 
 /**
  * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
@@ -9,12 +8,8 @@ import { html } from '@polymer/polymer/lib/utils/html-tag';
  * @customElement
  * @demo demo/index.html
  */
-class CosmozTreenode extends PolymerElement {
-	static get is() {
-		return 'cosmoz-treenode';
-	}
-
-	static get template() {
+class CosmozTreenode extends LitElement {
+	render() {
 		return html`
 			<style>
 				:host {
@@ -27,7 +22,7 @@ class CosmozTreenode extends PolymerElement {
 					text-overflow: ellipsis;
 				}
 			</style>
-			<span>[[ _pathText ]]</span>
+			<span>${ this._pathText }</span>
 		`;
 	}
 
@@ -38,6 +33,7 @@ class CosmozTreenode extends PolymerElement {
 			* Name of the property used to lookup the displayed node in the tree
 			*/
 			keyProperty: {
+				attribute: 'key-property',
 				type: String
 			},
 
@@ -45,6 +41,7 @@ class CosmozTreenode extends PolymerElement {
 			* The value for the `keyProperty` used to lookup the node in the tree.
 			*/
 			keyValue: {
+				attribute: 'key-value',
 				type: String
 			},
 
@@ -53,13 +50,13 @@ class CosmozTreenode extends PolymerElement {
 			},
 
 			valueProperty: {
-				type: String,
-				value: 'name'
+				attribute: 'value-property',
+				type: String
 			},
 
 			pathSeparator: {
-				type: String,
-				value: ' / '
+				attribute: 'path-separator',
+				type: String
 			},
 
 			/**
@@ -67,44 +64,31 @@ class CosmozTreenode extends PolymerElement {
 			* If the path to the displayed node has less nodes than this number, then nothing is hidden.
 			*/
 			hideFromRoot: {
-				type: Number,
-				value: 0
+				attribute: 'hide-from-root',
+				type: Number
 			},
 
 			showMaxNodes: {
-				type: Number,
-				value: 0
+				attribute: 'show-max-nodes',
+				type: Number
 			},
 
 			ellipsis: {
-				type: String,
-				value: '… / '
-			},
-
-			noWrap: {
-				type: Boolean,
-				reflectToAttribute: true
-			},
-
-			_path: {
-				type: Array,
-				computed: '_computePath(ownerTree, keyProperty, keyValue)'
-			},
-
-			_pathToRender: {
-				type: Array,
-				computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
-			},
-
-			_pathText: {
-				type: String,
-				computed: '_computePathText(_pathToRender, valueProperty, pathSeparator)'
+				type: String
 			}
-
 		};
 	}
 
-	_computePathToRender(path, hideFromRoot, showMaxNode) {
+	constructor() {
+		super();
+		this.ellipsis = '… / ';
+		this.hideFromRoot = 0;
+		this.pathSeparator = ' / ';
+		this.showMaxNodes = 0;
+		this.valueProperty = 'name';
+	}
+
+	_computePathToRender(path, hideFromRoot, showMaxNodes) {
 		if (!path) {
 			return;
 		}
@@ -113,13 +97,35 @@ class CosmozTreenode extends PolymerElement {
 			pathToRender = path.slice(hideFromRoot);
 		}
 
-		if (showMaxNode > 0 && pathToRender.length > showMaxNode) {
-			pathToRender = path.slice(-showMaxNode);
+		if (showMaxNodes > 0 && pathToRender.length > showMaxNodes) {
+			pathToRender = path.slice(-showMaxNodes);
 		}
 		return pathToRender;
 	}
 
-	/* eslint-disable-next-line max-statements */
+	/**
+	 * Walks the path array from the end until an undefined part is found
+	 * to make sure no unknown parts are present.
+	 * @param {Array} inputPath Array of path parts
+	 * @returns {Array} Array with defined parts
+	 */
+	getKnownPath(inputPath) {
+		let path = inputPath;
+		if (!Array.isArray(path) || path.length === 0) {
+			return path;
+		}
+		for (let i = path.length - 1; i >= 0; i--) {
+			if (path[i] === undefined) {
+				path.splice(0, i + 1);
+				if (path.length === 0) {
+					path = null;
+				}
+				break;
+			}
+		}
+		return path;
+	}
+
 	_computePath(ownerTree, keyProperty, keyValue) {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
 		let path = null;
@@ -136,32 +142,28 @@ class CosmozTreenode extends PolymerElement {
 				path = ownerTree.getPathNodes(node.pathLocator);
 			}
 		}
-		if (Array.isArray(path) && path.length) {
-			for (let i = path.length - 1; i >= 0; i--) {
-				if (path[i] === undefined) {
-					path.splice(0, i + 1);
-					if (path.length === 0) {
-						path = null;
-					}
-					break;
-				}
-			}
-		}
-		return path;
+
+		return this.getKnownPath(path);
 	}
 
-	_computePathText(pathToRender, valueProperty, pathSeparator) {
-		if (!pathToRender) {
-			return;
-		}
-		let text = pathToRender.map(node => {
-			return this.ownerTree.getProperty(node, valueProperty);
-		}).join(pathSeparator);
+	get _pathText() {
+		const path = this._computePath(this.ownerTree, this.keyProperty, this.keyValue),
+			pathToRender = this._computePathToRender(path, this.hideFromRoot, this.showMaxNodes);
 
-		if (pathToRender.length < this._path.length) {
+		if (!pathToRender) {
+			return '';
+		}
+
+		const stringParts = pathToRender.map(node =>
+			this.ownerTree.getProperty(node, this.valueProperty)
+		);
+
+		let text = stringParts.join(this.pathSeparator);
+
+		if (pathToRender.length < path.length) {
 			text = this.ellipsis + text;
 		}
 		return text;
 	}
 }
-customElements.define(CosmozTreenode.is, CosmozTreenode);
+customElements.define('cosmoz-treenode', CosmozTreenode);

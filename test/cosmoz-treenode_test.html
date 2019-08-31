@@ -16,18 +16,8 @@
 	<script type="module" src="/components/@polymer/iron-test-helpers/iron-test-helpers.js"></script>
 
 	<script type="module" src="../cosmoz-treenode.js"></script>
-	<script type="module" src="/components/@polymer/iron-ajax/iron-ajax.js"></script>
 </head>
 <body>
-
-	<test-fixture id="basicTree">
-		<template>
-			<iron-ajax auto
-				url="/components/@neovici/cosmoz-tree/test/data/basicTree.json"
-				handle-as="json">
-			</iron-ajax>
-		</template>
-	</test-fixture>
 
 	<test-fixture id="basic">
 		<template>
@@ -41,28 +31,9 @@
 		</template>
 	</test-fixture>
 
-
-	<test-fixture id="multiRootTree">
-		<template>
-			<iron-ajax auto
-				url="/components/@neovici/cosmoz-tree/test/data/multiRootTree.json"
-				handle-as="json">
-			</iron-ajax>
-		</template>
-	</test-fixture>
-
 	<test-fixture id="multiRoot">
 		<template>
 			<cosmoz-treenode key-property="pathLocator" key-value="1.2.3"></cosmoz-treenode>
-		</template>
-	</test-fixture>
-
-	<test-fixture id="missingAncestorTree">
-		<template>
-			<iron-ajax auto
-				url="/components/@neovici/cosmoz-tree/test/data/missingAncestorTree.json"
-				handle-as="json">
-			</iron-ajax>
 		</template>
 	</test-fixture>
 
@@ -74,20 +45,26 @@
 
 	<script type="module">
 	import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
+
+	const treeBaseUrl = '/components/@neovici/cosmoz-tree/test/data',
+		basicTreeUrl = `${ treeBaseUrl }/basicTree.json`,
+		multiRootTreeUrl = `${ treeBaseUrl }/multiRootTree.json`,
+		missingAncestorTreeUrl = `${ treeBaseUrl }/missingAncestorTree.json`,
+		treeFromJsonUrl = async url => {
+			const json = await fetch(url).then(r => r.json());
+			return new DefaultTree(json);
+		};
+	
 	suite('basic', () => {
 		let basicFixture,
 			basicTree;
 
-		suiteSetup(done => {
-			const basicTreeFixture = fixture('basicTree');
-			basicTreeFixture.addEventListener('response', () => {
-				basicTree = new DefaultTree(basicTreeFixture.lastResponse);
-				done();
-			});
+		suiteSetup(async () => {
+			basicTree = await treeFromJsonUrl(basicTreeUrl);
 		});
 
-		setup(() => {
-			basicFixture = fixture('basic');
+		setup(async () => {
+			basicFixture = await fixture('basic');
 			basicFixture.ownerTree = basicTree;
 		});
 
@@ -121,28 +98,28 @@
 			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(sep));
 		});
 
-		test('uses pathSeparator', () => {
+		test('uses pathSeparator', done => {
 			const customSep = '#';
 			basicFixture.pathSeparator = customSep;
-			const textContent = basicFixture.shadowRoot.querySelector('span').textContent;
-			assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
+			setTimeout(() => {
+				const textContent = basicFixture.shadowRoot.querySelector('span').textContent;
+				assert.equal(textContent, ['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
+				done();
+			});
 		});
 	});
+
 
 	suite('lookupNodeById', () => {
 		let basicFixture,
 			basicTree;
 
-		suiteSetup(done => {
-			const basicTreeFixture = fixture('basicTree');
-			basicTreeFixture.addEventListener('response', () => {
-				basicTree = new DefaultTree(basicTreeFixture.lastResponse);
-				done();
-			});
+		suiteSetup(async () => {
+			basicTree = await treeFromJsonUrl(basicTreeUrl);
 		});
 
-		setup(() => {
-			basicFixture = fixture('lookupNodeById');
+		setup(async () => {
+			basicFixture = await fixture('lookupNodeById');
 			basicFixture.ownerTree = basicTree;
 		});
 
@@ -153,20 +130,18 @@
 		});
 
 	});
+
+
 	suite('multiRoot', () => {
 		let multiRootFixture,
 			multiRootTree;
 
-		suiteSetup(done => {
-			const treeFixture = fixture('multiRootTree');
-			treeFixture.addEventListener('response', () => {
-				multiRootTree = new DefaultTree(treeFixture.lastResponse);
-				done();
-			});
+		suiteSetup(async () => {
+			multiRootTree = await treeFromJsonUrl(multiRootTreeUrl);
 		});
 
-		setup(() => {
-			multiRootFixture = fixture('multiRoot');
+		setup(async () => {
+			multiRootFixture = await fixture('multiRoot');
 			multiRootFixture.ownerTree = multiRootTree;
 		});
 
@@ -178,20 +153,17 @@
 
 	});
 
+
 	suite('missingAncestor', () => {
 		let missingAncestorFixture,
 			missingAncestorTree;
 
-		suiteSetup(done => {
-			const treeFixture = fixture('missingAncestorTree');
-			treeFixture.addEventListener('response', () => {
-				missingAncestorTree = new DefaultTree(treeFixture.lastResponse);
-				done();
-			});
+		suiteSetup(async () => {
+			missingAncestorTree = await treeFromJsonUrl(missingAncestorTreeUrl);
 		});
 
-		setup(() => {
-			missingAncestorFixture = fixture('missingAncestor');
+		setup(async () => {
+			missingAncestorFixture = await fixture('missingAncestor');
 			missingAncestorFixture.ownerTree = missingAncestorTree;
 		});
 
