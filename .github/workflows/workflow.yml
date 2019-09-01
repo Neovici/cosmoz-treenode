@@ -24,7 +24,10 @@ jobs:
     - name: ESLint
       uses: gimenete/eslint-action@1.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Polymer lint
+      run: npx polymer lint cosmoz-treenode.js
      
     - name: Test and report
       env:
