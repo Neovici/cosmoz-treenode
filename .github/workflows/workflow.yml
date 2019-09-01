@@ -15,11 +15,14 @@ jobs:
       uses: actions/setup-node@v1
       with:
         version: 10.x
-    - name: Build
+    - name: Install
+      run: npm install
+    - name: ESLint
+      uses: gimenete/eslint-action@1.0
+    - name: Test
       env:
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_TOKEN: ${{ secrets.SAUCE_ACCESS_TOKEN }}
-      run: |
-        npm install
-        npm run test
-        npm run build --if-present
+      run: npm run test
+    - name: Build
+      run: npm run build --if-present
