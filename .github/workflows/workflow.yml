@@ -25,7 +25,7 @@ jobs:
       env:
         CC_TEST_REPORTER_ID: 5286fe366f9880c571dcdfe0d7748a6343eb7eb0788250626df792cd3120ab87
         NEO_CC_URL: https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
-        NEO_CC: $HOME/cc/cc-test-reporter
+        NEO_CC: cc-test-reporter
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
         SAUCE_ACCESS_TOKEN: ${{ secrets.SAUCE_ACCESS_TOKEN }}
       run: |
