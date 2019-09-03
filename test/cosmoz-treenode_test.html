@@ -63,9 +63,10 @@
 			basicTree = await treeFromJsonUrl(basicTreeUrl);
 		});
 
-		setup(async () => {
-			basicFixture = await fixture('basic');
+		setup(done => {
+			basicFixture = fixture('basic');
 			basicFixture.ownerTree = basicTree;
+			setTimeout(done);
 		});
 
 		test('instantiating the element works', () => {
@@ -118,9 +119,10 @@
 			basicTree = await treeFromJsonUrl(basicTreeUrl);
 		});
 
-		setup(async () => {
-			basicFixture = await fixture('lookupNodeById');
+		setup(done => {
+			basicFixture = fixture('lookupNodeById');
 			basicFixture.ownerTree = basicTree;
+			setTimeout(done);
 		});
 
 		test('renders path', () => {
@@ -140,9 +142,10 @@
 			multiRootTree = await treeFromJsonUrl(multiRootTreeUrl);
 		});
 
-		setup(async () => {
-			multiRootFixture = await fixture('multiRoot');
+		setup(done => {
+			multiRootFixture = fixture('multiRoot');
 			multiRootFixture.ownerTree = multiRootTree;
+			setTimeout(done);
 		});
 
 		test('renders path', () => {
@@ -162,9 +165,10 @@
 			missingAncestorTree = await treeFromJsonUrl(missingAncestorTreeUrl);
 		});
 
-		setup(async () => {
-			missingAncestorFixture = await fixture('missingAncestor');
+		setup(done => {
+			missingAncestorFixture = fixture('missingAncestor');
 			missingAncestorFixture.ownerTree = missingAncestorTree;
+			setTimeout(done);
 		});
 
 		test('renders all path parts', () => {
