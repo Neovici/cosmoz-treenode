@@ -7,7 +7,7 @@ on:
     branches:
       - master
 jobs:
-  build:
+  eslint:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -24,8 +24,21 @@ jobs:
     - name: Annotated ESLint
       uses: rkusa/eslint-action@1.0.0
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+  
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+      
+    - name: Use Node.js 10.x
+      uses: actions/setup-node@v1
+      with:
+        version: 10.x
         
+    - name: Install
+      run: npm install
     - name: Polymer lint
       run: npx polymer lint cosmoz-treenode.js
      
@@ -41,6 +54,3 @@ jobs:
         $NEO_CC before-build
         npm run test $([ -z "$SAUCE_ACCESS_KEY"] && echo "-- --skip-plugin sauce")
         $NEO_CC after-build --exit-code $?
-        
-    - name: Build
-      run: npm run build --if-present
