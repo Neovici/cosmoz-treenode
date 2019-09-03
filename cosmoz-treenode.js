@@ -1,6 +1,6 @@
 import { Tree } from '@neovici/cosmoz-tree';
 
-import { LitElement, html } from 'lit-element';
+import { ComputingLitElement, html } from 'computing-lit-element/computing-lit-element.js';
 
 /**
  * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
@@ -8,7 +8,7 @@ import { LitElement, html } from 'lit-element';
  * @customElement
  * @demo demo/index.html
  */
-class CosmozTreenode extends LitElement {
+class CosmozTreenode extends ComputingLitElement {
 	render() {
 		return html`
 			<style>
@@ -75,6 +75,21 @@ class CosmozTreenode extends LitElement {
 
 			ellipsis: {
 				type: String
+			},
+
+			_path: {
+				type: Array,
+				computed: '_computePath(ownerTree, keyProperty, keyValue)'
+			},
+
+			_pathToRender: {
+				type: Array,
+				computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
+			},
+
+			_pathText: {
+				type: String,
+				computed: '_computePathText(_pathToRender, valueProperty, pathSeparator)'
 			}
 		};
 	}
@@ -146,21 +161,19 @@ class CosmozTreenode extends LitElement {
 		return this.getKnownPath(path);
 	}
 
-	get _pathText() {
-		const path = this._computePath(this.ownerTree, this.keyProperty, this.keyValue),
-			pathToRender = this._computePathToRender(path, this.hideFromRoot, this.showMaxNodes);
+	_computePathText(pathToRender, valueProperty, pathSeparator) {
 
 		if (!pathToRender) {
 			return '';
 		}
 
 		const stringParts = pathToRender.map(node =>
-			this.ownerTree.getProperty(node, this.valueProperty)
+			this.ownerTree.getProperty(node, valueProperty)
 		);
 
-		let text = stringParts.join(this.pathSeparator);
+		let text = stringParts.join(pathSeparator);
 
-		if (pathToRender.length < path.length) {
+		if (pathToRender.length < this._path.length) {
 			text = this.ellipsis + text;
 		}
 		return text;
