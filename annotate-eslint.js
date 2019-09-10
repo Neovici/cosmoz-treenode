@@ -52,20 +52,18 @@ const https = require('https'),
 		'User-Agent': 'eslint-action'
 	},
 	createCheck = async () => {
-		const body = {
+		const { data } = await request(`https://api.github.com/repos/${ owner }/${ repo }/check-runs`, {
+			method: 'POST',
+			headers,
+			body: {
 				name: checkName,
 				head_sha: GITHUB_SHA,
 				status: 'in_progress',
-				started_at: new Date()
-			},
-			{ data } = await request(`https://api.github.com/repos/${ owner }/${ repo }/check-runs`, {
-				method: 'POST',
-				headers,
-				body
-			}),
-			{ id } = data;
+				started_at: (new Date()).toISOString()
+			}
+		});
 		console.log('check create', data);
-		return id;
+		return data.id;
 	},
 	eslint = () => {
 		const eslint = require('eslint'),
@@ -73,22 +71,26 @@ const https = require('https'),
 			report = cli.executeOnFiles(['.']),
 			// fixableErrorCount, fixableWarningCount are available too
 			{ results, errorCount, warningCount } = report,
-			levels = ['', 'warning', 'failure'];
+			levels = ['notice', 'warning', 'failure'];
 
 		console.log('results', results);
 
 		const annotations = results.reduce((annoList, result) => {
 			const { filePath, messages } = result,
 				path = filePath.substring(GITHUB_WORKSPACE.length + 1);
-			return annoList.concat(messages.map(msg => {
-				const { line, severity, ruleId, message } = msg,
-					annotationLevel = levels[severity];
+			return annoList.concat(messages.map(m => {
+				console.log('msg', m);
+				const singleLine = m.line === m.endLine;
 				return {
 					path,
-					start_line: line,
-					end_line: line,
-					annotation_level: annotationLevel,
-					message: `[${ruleId}] ${message}`
+					start_column: singleLine && m.column,
+					end_column: singleLine && m.endColumn,
+					start_line: m.line,
+					end_line: m.endLine,
+					annotation_level: levels[m.severity],
+					// title: `${ path }#L${ m.line }`,
+					message: `${ m.ruleId }: ${ m.message }`,
+					raw_details: 'Nothing much'
 				};
 			}));
 		}, []);
@@ -98,6 +100,7 @@ const https = require('https'),
 			output: {
 				title: checkName,
 				summary: `${ errorCount } error(s), ${ warningCount } warning(s) found`,
+				text: 'A little bit of text',
 				annotations
 			}
 		};
@@ -110,7 +113,7 @@ const https = require('https'),
 				name: checkName,
 				head_sha: GITHUB_SHA,
 				status: 'completed',
-				completed_at: new Date(),
+				completed_at: (new Date()).toISOString(),
 				conclusion,
 				output
 			}
@@ -129,5 +132,7 @@ const https = require('https'),
 			exitWithError(err);
 		}
 	};
+
+console.log(event);
 
 run().catch(exitWithError);
