@@ -39,6 +39,12 @@ jobs:
         
     - name: Install
       run: npm install
+
+    - name: ESLint
+      run: node annotate-eslint.js
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Polymer lint
       run: npx polymer lint cosmoz-treenode.js
      
