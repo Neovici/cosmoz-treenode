@@ -41,11 +41,21 @@ const https = require('https'),
 			}
 		}),
 	event = require(GITHUB_EVENT_PATH),
-	{ pull_request: { head: { sha: prSha }}} = event,
-	{ repository } = event,
-	{ owner: { login: owner } } = repository,
-	{ name: repo } = repository,
+	{
+		pull_request: {
+			head: {
+				sha: prSha
+			}
+		},
+		repository: {
+			name: repo,
+			owner: {
+				login: owner
+			}
+		}
+	} = event,
 	checkName = 'ESLint check',
+	checkSha = prSha || GITHUB_SHA,
 	headers = {
 		'Content-Type': 'application/json',
 		Accept: 'application/vnd.github.antiope-preview+json',
@@ -58,12 +68,11 @@ const https = require('https'),
 			headers,
 			body: {
 				name: checkName,
-				head_sha: prSha || GITHUB_SHA,
+				head_sha: checkSha,
 				status: 'in_progress',
 				started_at: (new Date()).toISOString()
 			}
 		});
-		console.log('check create', data);
 		return data.id;
 	},
 	eslint = () => {
@@ -71,16 +80,11 @@ const https = require('https'),
 			cli = new eslint.CLIEngine(),
 			report = cli.executeOnFiles(['.']),
 			// fixableErrorCount, fixableWarningCount are available too
-			{ results, errorCount, warningCount } = report,
 			levels = ['notice', 'warning', 'failure'];
 
-		console.log('results', results);
-
-		const annotations = results.reduce((annoList, result) => {
-			const { filePath, messages } = result,
-				path = filePath.substring(GITHUB_WORKSPACE.length + 1);
-			return annoList.concat(messages.map(m => {
-				console.log('msg', m);
+		const annotations = report.results.reduce((annoList, result) => {
+			const path = result.filePath.substring(GITHUB_WORKSPACE.length + 1);
+			return annoList.concat(result.messages.map(m => {
 				const singleLine = m.line === m.endLine;
 				return {
 					path,
@@ -90,11 +94,13 @@ const https = require('https'),
 					end_line: m.endLine,
 					annotation_level: levels[m.severity],
 					// title: `${ path }#L${ m.line }`,
-					message: `${ m.ruleId }: ${ m.message }`,
-					raw_details: 'Nothing much'
+					// raw_details: 'Nothing much',
+					message: `${ m.ruleId }: ${ m.message }`
 				};
 			}));
 		}, []);
+
+		const { errorCount, warningCount } = report;
 
 		return {
 			conclusion: errorCount > 0 ? 'failure' : 'success',
@@ -112,7 +118,7 @@ const https = require('https'),
 			headers,
 			body: {
 				name: checkName,
-				head_sha: prSha || GITHUB_SHA,
+				head_sha: checkSha,
 				status: 'completed',
 				completed_at: (new Date()).toISOString(),
 				conclusion,
@@ -133,7 +139,5 @@ const https = require('https'),
 			exitWithError(err);
 		}
 	};
-
-console.log(event);
 
 run().catch(exitWithError);
