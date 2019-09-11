@@ -7,25 +7,6 @@ on:
     branches:
       - master
 jobs:
-  eslint:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@master
-      
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
-      with:
-        version: 10.x
-        
-    - name: Install
-      run: npm install
-
-    - name: Annotated ESLint
-      uses: rkusa/eslint-action@1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
-  
   test:
     runs-on: ubuntu-latest
     steps:
@@ -41,7 +22,7 @@ jobs:
       run: npm install
 
     - name: ESLint
-      run: node annotate-eslint.js
+      run: npx @neovici/github-actions-eslint-annotator@0.1.1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
