@@ -41,6 +41,7 @@ const https = require('https'),
 			}
 		}),
 	event = require(GITHUB_EVENT_PATH),
+	{ pull_request: { head: { sha: prSha }}} = event,
 	{ repository } = event,
 	{ owner: { login: owner } } = repository,
 	{ name: repo } = repository,
@@ -57,7 +58,7 @@ const https = require('https'),
 			headers,
 			body: {
 				name: checkName,
-				head_sha: GITHUB_SHA,
+				head_sha: prSha || GITHUB_SHA,
 				status: 'in_progress',
 				started_at: (new Date()).toISOString()
 			}
@@ -111,7 +112,7 @@ const https = require('https'),
 			headers,
 			body: {
 				name: checkName,
-				head_sha: GITHUB_SHA,
+				head_sha: prSha || GITHUB_SHA,
 				status: 'completed',
 				completed_at: (new Date()).toISOString(),
 				conclusion,
