@@ -162,7 +162,6 @@ class CosmozTreenode extends ComputingLitElement {
 	}
 
 	_computePathText(pathToRender, valueProperty, pathSeparator) {
-		console.log('test eslint error');
 		if (!pathToRender) {
 			return '';
 		}
