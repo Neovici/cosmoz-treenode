@@ -3,7 +3,7 @@
 	"version": "4.0.1",
 	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-treenode.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-treenode)",
 	"keywords": [
-		"polymer",
+		"lit-element",
 		"web-components"
 	],
 	"homepage": "https://github.com/neovici/cosmoz-treenode#readme",
@@ -15,13 +15,12 @@
 		"url": "git+https://github.com/neovici/cosmoz-treenode.git"
 	},
 	"license": "Apache-2.0",
-	"author": "",
+	"author": "Neovici dev",
 	"main": "cosmoz-treenode.js",
 	"directories": {
 		"test": "test"
 	},
 	"scripts": {
-		"analyze": "polymer analyze --input cosmoz-*.js > analysis.json",
 		"lint": "eslint --cache --ext .js .",
 		"preversion": "npm run lint && npm run test -- --skip-plugin sauce",
 		"postversion": "git push && git push --tags",

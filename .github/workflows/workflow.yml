@@ -19,15 +19,12 @@ jobs:
         version: 10.x
         
     - name: Install
-      run: npm install
+      run: npm ci
 
     - name: ESLint
       run: npx github-actions-eslint-annotator
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Polymer lint
-      run: npx polymer lint cosmoz-treenode.js
      
     - name: Test and report
       env:
