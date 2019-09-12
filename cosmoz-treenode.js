@@ -162,7 +162,6 @@ class CosmozTreenode extends ComputingLitElement {
 	}
 
 	_computePathText(pathToRender, valueProperty, pathSeparator) {
-
 		if (!pathToRender) {
 			return '';
 		}

@@ -3,7 +3,7 @@
 	"version": "4.0.1",
 	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-treenode.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-treenode)",
 	"keywords": [
-		"polymer",
+		"lit-element",
 		"web-components"
 	],
 	"homepage": "https://github.com/neovici/cosmoz-treenode#readme",
@@ -15,13 +15,12 @@
 		"url": "git+https://github.com/neovici/cosmoz-treenode.git"
 	},
 	"license": "Apache-2.0",
-	"author": "",
+	"author": "Neovici dev",
 	"main": "cosmoz-treenode.js",
 	"directories": {
 		"test": "test"
 	},
 	"scripts": {
-		"analyze": "polymer analyze --input cosmoz-*.js > analysis.json",
 		"lint": "eslint --cache --ext .js .",
 		"preversion": "npm run lint && npm run test -- --skip-plugin sauce",
 		"postversion": "git push && git push --tags",
@@ -34,6 +33,7 @@
 	},
 	"devDependencies": {
 		"@neovici/eslint-config": "github:neovici/eslint-config#semver:^1.0.0",
+		"@neovici/github-actions-eslint-annotator": "^0.1.2",
 		"@polymer/iron-component-page": "^4.0.0",
 		"@polymer/iron-demo-helpers": "^3.0.0",
 		"@polymer/iron-test-helpers": "^3.0.0",
