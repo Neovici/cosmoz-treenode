@@ -23,6 +23,11 @@ module.exports = config => {
 
 			esm: {
 				nodeResolve: true
+			},
+			client: {
+				mocha: {
+					ui: 'tdd'
+				}
 			}
 			// you can overwrite/extend the config further
 		}),
