@@ -1,6 +1,6 @@
 {
 	"name": "@neovici/cosmoz-treenode",
-	"version": "4.0.1",
+	"version": "4.1.0",
 	"description": "[![Build Status](https://travis-ci.org/Neovici/cosmoz-treenode.svg?branch=master)](https://travis-ci.org/Neovici/cosmoz-treenode)",
 	"keywords": [
 		"lit-element",
