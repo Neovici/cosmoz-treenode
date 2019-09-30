@@ -34,7 +34,7 @@ jobs:
         NEO_CC_URL: https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64
         NEO_CC: ./cc-test-reporter
         SAUCE_USERNAME: ${{ secrets.SAUCE_USERNAME }}
-        SAUCE_ACCESS_TOKEN: ${{ secrets.SAUCE_ACCESS_TOKEN }}
+        SAUCE_ACCESS_KEY: ${{ secrets.SAUCE_ACCESS_KEY }}
       run: |
         ([[ -e $NEO_CC ]] || curl -L $NEO_CC_URL > $NEO_CC) && chmod +x $NEO_CC
         $NEO_CC before-build
