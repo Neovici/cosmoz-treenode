@@ -1,6 +1,6 @@
 {
 	"name": "@neovici/cosmoz-treenode",
-	"version": "4.1.0",
+	"version": "4.1.1",
 	"description": "Utility class to manipulate a tree data structure.",
 	"keywords": [
 		"lit-element",
