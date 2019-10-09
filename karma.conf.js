@@ -1,6 +1,6 @@
 /* eslint-env node */
-const { createDefaultConfig } = require('@open-wc/testing-karma');
-const merge = require('deepmerge');
+const { createDefaultConfig } = require('@open-wc/testing-karma'),
+	merge = require('deepmerge');
 
 module.exports = config => {
 	config.set(
