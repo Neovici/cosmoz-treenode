@@ -12,20 +12,23 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-      
+
     - name: Use Node.js 10.x
       uses: actions/setup-node@v1
       with:
         version: 10.x
-        
+
     - name: Install
       run: npm ci
+
+    - name: Lint commit messages
+      run: npx commitlint --from origin/master --to HEAD
 
     - name: ESLint
       run: npx github-actions-eslint-annotator
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     
+
     - name: Test and report
       env:
         CC_TEST_REPORTER_ID: 5286fe366f9880c571dcdfe0d7748a6343eb7eb0788250626df792cd3120ab87
@@ -40,3 +43,10 @@ jobs:
         $NEO_CC before-build
         npm run test $([ -z "$SAUCE_ACCESS_KEY"] && echo "-- --skip-plugin sauce")
         $NEO_CC after-build --exit-code $?
+
+    - name: Semantic release
+      run: npx semantic-release
+      if: success()
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
