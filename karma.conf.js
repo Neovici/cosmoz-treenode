@@ -9,23 +9,11 @@ const { createDefaultConfig } = require('@open-wc/testing-karma'),
 		}
 	},
 	sauceCustomLaunchers = {
-		slAndroid: {
+		slChrome: {
 			base: 'SauceLabs',
 			browserName: 'chrome',
 			browserVersion: 'beta',
 			platformName: 'Windows 10'
-		},
-		slEdge: {
-			base: 'SauceLabs',
-			browserName: 'MicrosoftEdge',
-			browserVersion: '18.17763',
-			platformName: 'Windows 10'
-		},
-		slSafari: {
-			base: 'SauceLabs',
-			browserName: 'safari',
-			browserVersion: '12.0',
-			platformName: 'macOS 10.14'
 		}
 	},
 	allCustomLaunchers = { ...baseCustomLaunchers, ...sauceCustomLaunchers};
