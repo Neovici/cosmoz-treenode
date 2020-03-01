@@ -1,4 +1,6 @@
-import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
+import {
+	html, fixture, expect, elementUpdated
+} from '@open-wc/testing';
 import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
 import '../cosmoz-treenode.js';
 
