@@ -22,7 +22,7 @@
 	},
 	"scripts": {
 		"lint": "eslint --cache --ext .js .",
-		"start": "polymer serve -o",
+		"start": "es-dev-server",
 		"test": "karma start --coverage",
 		"test:watch": "karma start --auto-watch=true --single-run=false",
 		"test:update-snapshots": "karma start --update-snapshots",
@@ -58,22 +58,21 @@
 		"@neovici/cosmoz-tree": "^3.0.3"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^8.2.0",
-		"@commitlint/config-conventional": "^8.2.0",
-		"@neovici/eslint-config": "^1.1.7",
-		"@neovici/github-actions-eslint-annotator": "^0.3.0",
-		"@open-wc/testing": "^2.3.9",
-		"@open-wc/testing-karma": "^3.1.48",
-		"@polymer/iron-component-page": "^4.0.0",
-		"@polymer/iron-demo-helpers": "^3.0.0",
-		"@semantic-release/changelog": "^3.0.5",
-		"@semantic-release/git": "^7.0.17",
+		"@commitlint/cli": "^8.3.5",
+		"@commitlint/config-conventional": "^8.3.4",
+		"@neovici/eslint-config": "^1.2.0",
+		"@neovici/github-actions-eslint-annotator": "^0.4.0",
+		"@open-wc/testing": "^2.5.4",
+		"@open-wc/testing-karma": "^3.3.0",
+		"@semantic-release/changelog": "^5.0.0",
+		"@semantic-release/git": "^9.0.0",
 		"deepmerge": "^4.2.2",
-		"husky": "^3.0.9",
+		"es-dev-server": "^1.41.0",
+		"eslint": "^6.8.0",
+		"husky": "^4.2.3",
 		"karma": "^4.4.1",
-		"karma-firefox-launcher": "^1.2.0",
+		"karma-firefox-launcher": "^1.3.0",
 		"karma-sauce-launcher": "^2.0.2",
-		"polymer-cli": "^1.9.7",
-		"semantic-release": "^16.0.0-beta.25"
+		"semantic-release": "^17.0.4"
 	}
 }
