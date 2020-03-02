@@ -1,6 +1,8 @@
 import { Tree } from '@neovici/cosmoz-tree';
 
-import { ComputingLitElement, html } from '@neovici/computing-lit-element';
+import {
+	ComputingLitElement, html
+} from '@neovici/computing-lit-element';
 
 /**
  * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
