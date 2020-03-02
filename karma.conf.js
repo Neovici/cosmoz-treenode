@@ -53,7 +53,7 @@ module.exports = config => {
 				}
 			},
 			sauceLabs: {
-				testName: 'Web App Unit Tests'
+				testName: 'cosmoz-treenode karma tests'
 			},
 			reporters: ['dots', 'saucelabs'],
 			singleRun: true
