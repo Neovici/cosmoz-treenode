@@ -11,23 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v1
-
-    - name: Use Node.js 10.x
-      uses: actions/setup-node@v1
+      uses: actions/checkout@v2
       with:
-        node-version: 10.x
+          fetch-depth: 0
+
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+        cache: 'npm'
 
     - name: Install
       run: npm ci
 
     - name: Lint commit messages
-      run: npx commitlint --from origin/master --to HEAD
-
-    - name: ESLint
-      run: npx github-actions-eslint-annotator
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: wagoid/commitlint-github-action@v3
 
     - name: Test and report
       env:
@@ -41,7 +39,8 @@ jobs:
       run: |
         ([[ -e $NEO_CC ]] || curl -L $NEO_CC_URL > $NEO_CC) && chmod +x $NEO_CC
         $NEO_CC before-build
-        npm run test $([ -z "$SAUCE_ACCESS_KEY"] && echo "-- --skip-plugin sauce")
+        echo "::add-matcher::.github/karma-problem-matcher.json"
+        npm test
         $NEO_CC after-build --exit-code $?
 
     - name: Semantic release

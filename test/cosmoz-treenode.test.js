@@ -1,10 +1,8 @@
-import {
-	html, fixture, expect, elementUpdated
-} from '@open-wc/testing';
+import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
 import '../cosmoz-treenode.js';
 
-const treeBaseUrl = '/base/node_modules/@neovici/cosmoz-tree/test/data',
+const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	basicTreeUrl = `${ treeBaseUrl }/basicTree.json`,
 	multiRootTreeUrl = `${ treeBaseUrl }/multiRootTree.json`,
 	missingAncestorTreeUrl = `${ treeBaseUrl }/missingAncestorTree.json`,
