@@ -29,7 +29,7 @@ class CosmozTreenode extends ComputingLitElement {
 					:host span { display: inline-block;}
 				}}
 			</style>
-			<span title=${ this._pathText }>&lrm;${ this._pathText }</span>
+			<span title="${ this._pathText }">&lrm;${ this._pathText }</span>
 		`;
 	}
 
