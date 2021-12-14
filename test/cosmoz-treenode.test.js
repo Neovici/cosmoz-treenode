@@ -1,10 +1,8 @@
-import {
-	html, fixture, expect, elementUpdated
-} from '@open-wc/testing';
+import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
 import '../cosmoz-treenode.js';
 
-const treeBaseUrl = '/base/node_modules/@neovici/cosmoz-tree/test/data',
+const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	basicTreeUrl = `${ treeBaseUrl }/basicTree.json`,
 	multiRootTreeUrl = `${ treeBaseUrl }/multiRootTree.json`,
 	missingAncestorTreeUrl = `${ treeBaseUrl }/missingAncestorTree.json`,
@@ -52,7 +50,7 @@ suite('basic', () => {
 		await elementUpdated(basicFixture); // Firefox fails without this one
 		const sep = basicFixture.pathSeparator,
 			textContent = basicFixture.shadowRoot.querySelector('span').textContent;
-		expect(textContent).is.equal(['Root', 'Node2', 'Node3', 'Node301'].join(sep));
+		expect(textContent).to.include(['Root', 'Node2', 'Node3', 'Node301'].join(sep));
 	});
 
 	test('uses pathSeparator', async () => {
@@ -60,7 +58,7 @@ suite('basic', () => {
 		basicFixture.pathSeparator = customSep;
 		await elementUpdated(basicFixture);
 		const textContent = basicFixture.shadowRoot.querySelector('span').textContent;
-		expect(textContent).is.equal(['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
+		expect(textContent).to.include(['Root', 'Node2', 'Node3', 'Node301'].join(customSep));
 	});
 });
 
@@ -83,7 +81,7 @@ suite('lookupNodeById', () => {
 		await elementUpdated(basicFixture); // Firefox fails without this one
 		const sep = basicFixture.pathSeparator,
 			textContent = basicFixture.shadowRoot.querySelector('span').textContent;
-		expect(textContent).to.equal(['Root', 'Node2', 'Node3'].join(sep));
+		expect(textContent).to.include(['Root', 'Node2', 'Node3'].join(sep));
 	});
 });
 
@@ -106,7 +104,7 @@ suite('multiRoot', () => {
 		await elementUpdated(multiRootFixture); // Firefox fails without this one
 		const sep = multiRootFixture.pathSeparator,
 			textContent = multiRootFixture.shadowRoot.querySelector('span').textContent;
-		expect(textContent).to.equal(['Node2', 'Node3'].join(sep));
+		expect(textContent).to.include(['Node2', 'Node3'].join(sep));
 	});
 });
 
@@ -129,6 +127,6 @@ suite('missingAncestor', () => {
 		await elementUpdated(missingAncestorFixture); // Firefox fails without this one
 		const sep = missingAncestorFixture.pathSeparator,
 			textContent = missingAncestorFixture.shadowRoot.querySelector('span').textContent;
-		expect(textContent).is.equal(['Node301', 'Node401'].join(sep));
+		expect(textContent).is.include(['Node301', 'Node401'].join(sep));
 	});
 });

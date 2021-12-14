@@ -22,9 +22,14 @@ class CosmozTreenode extends ComputingLitElement {
 					white-space: nowrap;
 					overflow: hidden;
 					text-overflow: ellipsis;
+					direction: rtl;
 				}
+				/* Safari only css fix */
+				@media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
+					:host span { display: inline-block;}
+				}}
 			</style>
-			<span>${ this._pathText }</span>
+			<span title="${ this._pathText }">&lrm;${ this._pathText }</span>
 		`;
 	}
 
