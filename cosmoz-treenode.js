@@ -1,116 +1,6 @@
-import { Tree } from '@neovici/cosmoz-tree';
+import { component, html } from 'haunted';
 
-import {
-	ComputingLitElement, html
-} from '@neovici/computing-lit-element';
-
-/**
- * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
- * @polymer
- * @customElement
- * @demo demo/index.html
- */
-class CosmozTreenode extends ComputingLitElement {
-	render() {
-		return html`
-			<style>
-				:host {
-					display: block;
-				}
-
-				:host([no-wrap]) {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					direction: rtl;
-				}
-				/* Safari only css fix */
-				@media not all and (min-resolution:.001dpcm) { @supports (-webkit-appearance:none) {
-					:host span { display: inline-block;}
-				}}
-			</style>
-			<span title="${ this._pathText }">&lrm;${ this._pathText }</span>
-		`;
-	}
-
-	static get properties() {
-		return {
-
-			/**
-			* Name of the property used to lookup the displayed node in the tree
-			*/
-			keyProperty: {
-				attribute: 'key-property',
-				type: String
-			},
-
-			/**
-			* The value for the `keyProperty` used to lookup the node in the tree.
-			*/
-			keyValue: {
-				attribute: 'key-value',
-				type: String
-			},
-
-			ownerTree: {
-				type: Tree
-			},
-
-			valueProperty: {
-				attribute: 'value-property',
-				type: String
-			},
-
-			pathSeparator: {
-				attribute: 'path-separator',
-				type: String
-			},
-
-			/**
-			* Represent a number of nodes that should not be rendered starting from root.
-			* If the path to the displayed node has less nodes than this number, then nothing is hidden.
-			*/
-			hideFromRoot: {
-				attribute: 'hide-from-root',
-				type: Number
-			},
-
-			showMaxNodes: {
-				attribute: 'show-max-nodes',
-				type: Number
-			},
-
-			ellipsis: {
-				type: String
-			},
-
-			_path: {
-				type: Array,
-				computed: '_computePath(ownerTree, keyProperty, keyValue)'
-			},
-
-			_pathToRender: {
-				type: Array,
-				computed: '_computePathToRender(_path, hideFromRoot, showMaxNodes)'
-			},
-
-			_pathText: {
-				type: String,
-				computed: '_computePathText(_pathToRender, valueProperty, pathSeparator)'
-			}
-		};
-	}
-
-	constructor() {
-		super();
-		this.ellipsis = '… / ';
-		this.hideFromRoot = 0;
-		this.pathSeparator = ' / ';
-		this.showMaxNodes = 0;
-		this.valueProperty = 'name';
-	}
-
-	_computePathToRender(path, hideFromRoot, showMaxNodes) {
+const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		if (!path) {
 			return;
 		}
@@ -123,15 +13,14 @@ class CosmozTreenode extends ComputingLitElement {
 			pathToRender = path.slice(-showMaxNodes);
 		}
 		return pathToRender;
-	}
-
+	},
 	/**
 	 * Walks the path array from the end until an undefined part is found
 	 * to make sure no unknown parts are present.
 	 * @param {Array} inputPath Array of path parts
 	 * @returns {Array} Array with defined parts
 	 */
-	getKnownPath(inputPath) {
+	getKnownPath = (inputPath) => {
 		let path = inputPath;
 		if (!Array.isArray(path) || path.length === 0) {
 			return path;
@@ -146,9 +35,8 @@ class CosmozTreenode extends ComputingLitElement {
 			}
 		}
 		return path;
-	}
-
-	_computePath(ownerTree, keyProperty, keyValue) {
+	},
+	computePath = (ownerTree, keyProperty, keyValue) => {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
 		let path = null;
 
@@ -165,24 +53,93 @@ class CosmozTreenode extends ComputingLitElement {
 			}
 		}
 
-		return this.getKnownPath(path);
-	}
-
-	_computePathText(pathToRender, valueProperty, pathSeparator) {
+		return getKnownPath(path);
+	},
+	computePathText = ({
+		ownerTree,
+		ellipsis,
+		pathToRender,
+		path,
+		valueProperty,
+		pathSeparator,
+	}) => {
 		if (!pathToRender) {
 			return '';
 		}
 
-		const stringParts = pathToRender.map(node =>
-			this.ownerTree.getProperty(node, valueProperty)
+		const stringParts = pathToRender.map((node) =>
+			ownerTree.getProperty(node, valueProperty)
 		);
 
 		let text = stringParts.join(pathSeparator);
 
-		if (pathToRender.length < this._path.length) {
-			text = this.ellipsis + text;
+		if (pathToRender.length < path.length) {
+			text = ellipsis + text;
 		}
 		return text;
-	}
-}
-customElements.define('cosmoz-treenode', CosmozTreenode);
+	},
+	Treenode = ({
+		valueProperty = 'name',
+		pathSeparator = ' / ',
+		hideFromRoot = 0,
+		showMaxNodes = 0,
+		keyProperty,
+		keyValue,
+		ownerTree,
+		ellipsis = '… / ',
+	}) => {
+		const path = computePath(ownerTree, keyProperty, keyValue),
+			pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
+			pathText = computePathText({
+				ownerTree,
+				ellipsis,
+				pathToRender,
+				path,
+				valueProperty,
+				pathSeparator,
+			});
+
+		return html`
+			<style>
+				:host {
+					display: block;
+				}
+
+				:host([no-wrap]) {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					direction: rtl;
+				}
+				/* Safari only css fix */
+				@media not all and (min-resolution: 0.001dpcm) {
+					@supports (-webkit-appearance: none) {
+						:host span {
+							display: inline-block;
+						}
+					}
+				}
+			</style>
+			<span title=${pathText}>&lrm;${pathText}</span>
+		`;
+	};
+
+/**
+ * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
+ * @polymer
+ * @customElement
+ * @demo demo/index.html
+ */
+customElements.define(
+	'cosmoz-treenode',
+	component(Treenode, {
+		observedAttributes: [
+			'key-property',
+			'key-value',
+			'value-property',
+			'path-separator',
+			'hide-from-root',
+			'show-max-nodes',
+		],
+	})
+);
