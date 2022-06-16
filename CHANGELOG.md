@@ -1,3 +1,15 @@
+# [5.0.0](https://github.com/neovici/cosmoz-treenode/compare/v4.2.0...v5.0.0) (2022-06-16)
+
+
+### Features
+
+* replace computing-lit-element with haunted ([3d65d9a](https://github.com/neovici/cosmoz-treenode/commit/3d65d9ac2bb39ef9cbf9903b096fe6c92aef32e7))
+
+
+### BREAKING CHANGES
+
+* Replaces computing-lit-element with haunted
+
 # [4.2.0](https://github.com/neovici/cosmoz-treenode/compare/v4.1.2...v4.2.0) (2021-12-14)
 
 
