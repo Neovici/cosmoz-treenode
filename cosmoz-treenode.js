@@ -1,6 +1,6 @@
 import { component, html } from 'haunted';
 
-const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
+export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		if (!path) {
 			return;
 		}
