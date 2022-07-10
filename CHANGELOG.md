@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/neovici/cosmoz-treenode/compare/v5.0.0...v5.0.1) (2022-07-10)
+
+
+### Bug Fixes
+
+* **treenode:** show full path as title ([fb6ef98](https://github.com/neovici/cosmoz-treenode/commit/fb6ef98fd4f15876bfdee088129b99f2afc5bfbc))
+
 # [5.0.0](https://github.com/neovici/cosmoz-treenode/compare/v4.2.0...v5.0.0) (2022-06-16)
 
 
