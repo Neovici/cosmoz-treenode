@@ -90,13 +90,20 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 	}) => {
 		const path = computePath(ownerTree, keyProperty, keyValue),
 			pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
-			pathText = computePathText({
+			opts = {
 				ownerTree,
 				ellipsis,
-				pathToRender,
 				path,
 				valueProperty,
 				pathSeparator,
+			},
+			pathText = computePathText({
+				...opts,
+				pathToRender,
+			}),
+			pathTitle = computePathText({
+				...opts,
+				pathToRender: path,
 			});
 
 		return html`
@@ -120,7 +127,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 					}
 				}
 			</style>
-			<span title=${pathText}>&lrm;${pathText}</span>
+			<span title=${pathTitle}>&lrm;${pathText}</span>
 		`;
 	};
 
