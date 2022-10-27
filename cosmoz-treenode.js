@@ -78,6 +78,29 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		}
 		return text;
 	},
+	render = ({ title, text }) => html`
+		<style>
+			:host {
+				display: block;
+			}
+
+			:host([no-wrap]) {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				direction: rtl;
+			}
+			/* Safari only css fix */
+			@media not all and (min-resolution: 0.001dpcm) {
+				@supports (-webkit-appearance: none) {
+					:host span {
+						display: inline-block;
+					}
+				}
+			}
+		</style>
+		<span title=${title}>&lrm;${text}</span>
+	`,
 	Treenode = ({
 		valueProperty = 'name',
 		pathSeparator = ' / ',
@@ -87,48 +110,28 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		keyValue,
 		ownerTree,
 		ellipsis = '… / ',
+		fallback,
 	}) => {
-		const path = computePath(ownerTree, keyProperty, keyValue),
-			pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
+		const path = computePath(ownerTree, keyProperty, keyValue);
+		if (!path) return render({ text: fallback, title: fallback });
+		const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
 			opts = {
 				ownerTree,
 				ellipsis,
 				path,
 				valueProperty,
 				pathSeparator,
-			},
-			pathText = computePathText({
+			};
+		return render({
+			text: computePathText({
 				...opts,
 				pathToRender,
 			}),
-			pathTitle = computePathText({
+			title: computePathText({
 				...opts,
 				pathToRender: path,
-			});
-
-		return html`
-			<style>
-				:host {
-					display: block;
-				}
-
-				:host([no-wrap]) {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					direction: rtl;
-				}
-				/* Safari only css fix */
-				@media not all and (min-resolution: 0.001dpcm) {
-					@supports (-webkit-appearance: none) {
-						:host span {
-							display: inline-block;
-						}
-					}
-				}
-			</style>
-			<span title=${pathTitle}>&lrm;${pathText}</span>
-		`;
+			}),
+		});
 	};
 
 /**
@@ -147,6 +150,7 @@ customElements.define(
 			'path-separator',
 			'hide-from-root',
 			'show-max-nodes',
+			'fallback',
 		],
 	})
 );
