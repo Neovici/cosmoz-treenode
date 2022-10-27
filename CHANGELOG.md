@@ -1,3 +1,10 @@
+# [5.1.0](https://github.com/neovici/cosmoz-treenode/compare/v5.0.1...v5.1.0) (2022-10-27)
+
+
+### Features
+
+* add fallback ([3165705](https://github.com/neovici/cosmoz-treenode/commit/3165705f53a3f1aa8a9b6d6fab4ce708efd6fdd9))
+
 ## [5.0.1](https://github.com/neovici/cosmoz-treenode/compare/v5.0.0...v5.0.1) (2022-07-10)
 
 
