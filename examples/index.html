@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes"
+		/>
+
+		<title>cosmoz-treenode demo</title>
+
+		<script src="/node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
+		<script type="module" src="../cosmoz-treenode.js"></script>
+	</head>
+	<body>
+		<div>
+			<div>
+				<h2>Displaying node 'Company Ktwoktqtxv'</h2>
+				<cosmoz-treenode
+					id="treenode1"
+					path-separator="#"
+					key-property="id"
+					key-value="f7a21733-0e65-4985-9e40-a4fb00f3124f"
+				>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>Displaying node 'Company Djpahhofjp'</h2>
+				<cosmoz-treenode
+					key-property="id"
+					key-value="fc78989a-d213-496c-80db-a4fb00f31252"
+				>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>
+					Displaying node 'Company Djpahhofjp', hiding first 3 nodes from root
+				</h2>
+				<cosmoz-treenode
+					key-property="id"
+					key-value="fc78989a-d213-496c-80db-a4fb00f31252"
+					hide-from-root="3"
+				>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>Displaying node 'Company Ktwoktqtxv', showing only two node</h2>
+				<cosmoz-treenode
+					key-property="id"
+					key-value="f7a21733-0e65-4985-9e40-a4fb00f3124f"
+					show-max-nodes="2"
+				>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>Alternate separator</h2>
+				<cosmoz-treenode
+					key-property="id"
+					key-value="fc78989a-d213-496c-80db-a4fb00f31252"
+					path-separator="##"
+				>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>Alternate template</h2>
+				<cosmoz-treenode
+					id="alternateTemplate"
+					key-property="id"
+					key-value="fc78989a-d213-496c-80db-a4fb00f31252"
+				>
+					<template>
+						<span style="color: red" class="separator separator[[index]]"
+							>\$\$</span
+						>
+						<a href="#id=[[node.id]]">[[node.name]]</a>
+					</template>
+				</cosmoz-treenode>
+			</div>
+			<div>
+				<h2>Displaying node 'Company Ktwoktqtxv' with no-wrap</h2>
+				<div>
+					<cosmoz-treenode
+						id="treenode2"
+						no-wrap
+						key-property="id"
+						key-value="f7a21733-0e65-4985-9e40-a4fb00f3124f"
+					>
+					</cosmoz-treenode>
+				</div>
+			</div>
+		</div>
+
+		<script type="module" src="./script.js"></script>
+	</body>
+</html>
