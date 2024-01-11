@@ -1,3 +1,15 @@
+# [6.0.0](https://github.com/Neovici/cosmoz-treenode/compare/v5.1.0...v6.0.0) (2024-01-11)
+
+
+### Features
+
+* update to pion ([ebe2e48](https://github.com/Neovici/cosmoz-treenode/commit/ebe2e48745b91f610367e7c7c9b37b30f28721aa))
+
+
+### BREAKING CHANGES
+
+* Update to @pionjs/pion
+
 # [5.1.0](https://github.com/neovici/cosmoz-treenode/compare/v5.0.1...v5.1.0) (2022-10-27)
 
 
