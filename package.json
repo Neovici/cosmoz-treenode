@@ -6,13 +6,13 @@
 		"lit-element",
 		"web-components"
 	],
-	"homepage": "https://github.com/neovici/cosmoz-treenode#readme",
+	"homepage": "https://github.com/Neovici/cosmoz-treenode#readme",
 	"bugs": {
-		"url": "https://github.com/neovici/cosmoz-treenode/issues"
+		"url": "https://github.com/Neovici/cosmoz-treenode/issues"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/neovici/cosmoz-treenode.git"
+		"url": "git+https://github.com/Neovici/cosmoz-treenode.git"
 	},
 	"license": "Apache-2.0",
 	"author": "Neovici dev",
