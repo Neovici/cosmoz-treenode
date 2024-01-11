@@ -1,4 +1,4 @@
-import { component, html } from 'haunted';
+import { component, html } from '@pionjs/pion';
 
 export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		if (!path) {
