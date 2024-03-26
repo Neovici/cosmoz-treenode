@@ -1,6 +1,6 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
-import { computePath, computePathToRender } from '../cosmoz-treenode.js';
+import { computePath, computePathToRender } from '../src/cosmoz-treenode';
 
 const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	basicTreeUrl = `${treeBaseUrl}/basicTree.json`,
@@ -35,17 +35,17 @@ suite('basic', () => {
 	test('computePath', () => {
 		expect(computePath()).to.equal(undefined);
 		expect(
-			computePath(basicTree, 'id', '11111111-1111-1111-1111-111111111111')
+			computePath(basicTree, 'id', '11111111-1111-1111-1111-111111111111'),
 		).deep.equal(basicTree.getPathNodes('1'));
 		expect(
-			computePath(basicTree, 'id', '3a7654f1-e3e6-49c7-b6a8-a4fb00f31245')
+			computePath(basicTree, 'id', '3a7654f1-e3e6-49c7-b6a8-a4fb00f31245'),
 		).deep.equal(basicTree.getPathNodes('1.2.3'));
 		expect(
 			computePath(
 				new DefaultTree({}),
 				'id',
-				'11111111-1111-1111-1111-111111111111'
-			)
+				'11111111-1111-1111-1111-111111111111',
+			),
 		).to.equal(null);
 	});
 
@@ -65,7 +65,7 @@ suite('basic', () => {
 		const textContent =
 			basicFixture.shadowRoot.querySelector('span').textContent;
 		expect(textContent).to.include(
-			['Root', 'Node2', 'Node3', 'Node301'].join(' / ')
+			['Root', 'Node2', 'Node3', 'Node301'].join(' / '),
 		);
 	});
 
@@ -76,7 +76,7 @@ suite('basic', () => {
 		const textContent =
 			basicFixture.shadowRoot.querySelector('span').textContent;
 		expect(textContent).to.include(
-			['Root', 'Node2', 'Node3', 'Node301'].join(customSep)
+			['Root', 'Node2', 'Node3', 'Node301'].join(customSep),
 		);
 	});
 });
