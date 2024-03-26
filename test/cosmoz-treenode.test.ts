@@ -12,7 +12,7 @@ const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	};
 
 suite('basic', () => {
-	let basicFixture, basicTree;
+	let basicFixture, basicTree: DefaultTree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
@@ -82,7 +82,7 @@ suite('basic', () => {
 });
 
 suite('lookupNodeById', () => {
-	let basicFixture, basicTree;
+	let basicFixture, basicTree: DefaultTree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
@@ -107,7 +107,7 @@ suite('lookupNodeById', () => {
 });
 
 suite('multiRoot', () => {
-	let multiRootFixture, multiRootTree;
+	let multiRootFixture, multiRootTree: DefaultTree;
 
 	suiteSetup(async () => {
 		multiRootTree = await treeFromJsonUrl(multiRootTreeUrl);
@@ -132,7 +132,7 @@ suite('multiRoot', () => {
 });
 
 suite('missingAncestor', () => {
-	let missingAncestorFixture, missingAncestorTree;
+	let missingAncestorFixture, missingAncestorTree: DefaultTree;
 
 	suiteSetup(async () => {
 		missingAncestorTree = await treeFromJsonUrl(missingAncestorTreeUrl);

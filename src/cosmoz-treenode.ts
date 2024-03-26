@@ -1,6 +1,37 @@
 import { component, html } from '@pionjs/pion';
+import { Tree, Node } from '@neovici/cosmoz-tree/cosmoz-tree';
 
-export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
+export type ComputePathTextType = {
+	ownerTree: Tree;
+	ellipsis: string;
+	pathToRender: string | undefined;
+	path: string;
+	valueProperty: string;
+	pathSeparator: string | undefined;
+};
+
+export type RenderType = {
+	title: string;
+	text: string;
+};
+
+export type TreenodeType = {
+	valueProperty: string;
+	pathSeparator: string;
+	hideFromRoot: number;
+	showMaxNodes: number;
+	keyProperty: string;
+	keyValue: string;
+	ownerTree: Tree;
+	ellipsis: string;
+	fallback: string;
+};
+
+export const computePathToRender = (
+		path?: string,
+		hideFromRoot?: number,
+		showMaxNodes?: number,
+	) => {
 		if (!path) {
 			return;
 		}
@@ -20,7 +51,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 	 * @param {Array} inputPath Array of path parts
 	 * @returns {Array} Array with defined parts
 	 */
-	getKnownPath = (inputPath) => {
+	getKnownPath = (inputPath: (Node | undefined)[] | null) => {
 		let path = inputPath;
 		if (!Array.isArray(path) || path.length === 0) {
 			return path;
@@ -36,7 +67,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		}
 		return path;
 	},
-	computePath = (ownerTree, keyProperty, keyValue) => {
+	computePath = (ownerTree: Tree, keyProperty: string, keyValue: string) => {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
 		let path = null;
 
@@ -62,13 +93,13 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		path,
 		valueProperty,
 		pathSeparator,
-	}) => {
+	}: ComputePathTextType) => {
 		if (!pathToRender) {
 			return '';
 		}
 
 		const stringParts = pathToRender.map((node) =>
-			ownerTree.getProperty(node, valueProperty)
+			ownerTree.getProperty(node, valueProperty),
 		);
 
 		let text = stringParts.join(pathSeparator);
@@ -78,7 +109,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		}
 		return text;
 	},
-	render = ({ title, text }) => html`
+	render = ({ title, text }: RenderType) => html`
 		<style>
 			:host {
 				display: block;
@@ -111,7 +142,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		ownerTree,
 		ellipsis = '… / ',
 		fallback,
-	}) => {
+	}: TreenodeType) => {
 		const path = computePath(ownerTree, keyProperty, keyValue);
 		if (!path) return render({ text: fallback, title: fallback });
 		const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
@@ -152,5 +183,5 @@ customElements.define(
 			'show-max-nodes',
 			'fallback',
 		],
-	})
+	}),
 );
