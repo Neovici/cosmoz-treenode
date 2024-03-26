@@ -21,7 +21,7 @@
 		"test": "test"
 	},
 	"scripts": {
-		"lint": "eslint --cache --ext .js .",
+		"lint": "tsc && eslint --cache .",
 		"build": "tsc -p tsconfig.build.json",
 		"start": "wds",
 		"test": "wtr --coverage",
@@ -55,6 +55,7 @@
 		"dist/"
 	],
 	"exports": {
+		".": "./dist/cosmoz-treenode.js",
 		"./cosmoz-treenode": "./dist/cosmoz-treenode.js",
 		"./cosmoz-treenode.js": "./dist/cosmoz-treenode.js"
 	},
