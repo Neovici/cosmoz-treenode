@@ -4,3 +4,6 @@ debug.log
 yarn-error.log
 .DS_Store
 .eslintcache
+dist/
+storybook-static/
+demo-storybook/
