@@ -1,21 +1,7 @@
 import { component, html } from '@pionjs/pion';
 import { Tree, Node } from '@neovici/cosmoz-tree/cosmoz-tree';
 
-export type ComputePathTextType = {
-	ownerTree: Tree;
-	ellipsis: string;
-	pathToRender: string | undefined;
-	path: string;
-	valueProperty: string;
-	pathSeparator: string | undefined;
-};
-
-export type RenderType = {
-	title: string;
-	text: string;
-};
-
-export type TreenodeType = {
+export type Props = {
 	valueProperty: string;
 	pathSeparator: string;
 	hideFromRoot: number;
@@ -27,10 +13,19 @@ export type TreenodeType = {
 	fallback: string;
 };
 
+export interface ComputePathText
+	extends Pick<
+		Props,
+		'ownerTree' | 'ellipsis' | 'valueProperty' | 'pathSeparator'
+	> {
+	pathToRender?: string;
+	path: string;
+}
+
 export const computePathToRender = (
-		path?: string,
-		hideFromRoot?: number,
-		showMaxNodes?: number,
+		path: string | undefined,
+		hideFromRoot: number,
+		showMaxNodes: number,
 	) => {
 		if (!path) {
 			return;
@@ -93,7 +88,7 @@ export const computePathToRender = (
 		path,
 		valueProperty,
 		pathSeparator,
-	}: ComputePathTextType) => {
+	}: ComputePathText) => {
 		if (!pathToRender) {
 			return '';
 		}
@@ -109,7 +104,7 @@ export const computePathToRender = (
 		}
 		return text;
 	},
-	render = ({ title, text }: RenderType) => html`
+	render = ({ title, text }: { title: string; text: string }) => html`
 		<style>
 			:host {
 				display: block;
@@ -142,7 +137,7 @@ export const computePathToRender = (
 		ownerTree,
 		ellipsis = '… / ',
 		fallback,
-	}: TreenodeType) => {
+	}: Props) => {
 		const path = computePath(ownerTree, keyProperty, keyValue);
 		if (!path) return render({ text: fallback, title: fallback });
 		const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
