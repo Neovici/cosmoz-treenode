@@ -14,7 +14,7 @@ const TreeNodeTemplate = (
 	},
 	{ loaded: { treeJson } },
 ) => {
-	const tree = new Tree(treeJson);
+	const ownerTree = new Tree(treeJson);
 
 	return html`
 		<cosmoz-treenode
@@ -25,7 +25,7 @@ const TreeNodeTemplate = (
 			?hide-from-root=${hideFromRoot}
 			show-max-nodes=${showMaxNodes}
 			fallback=${fallback}
-			.ownerTree=${tree}
+			.ownerTree=${ownerTree}
 		></cosmoz-treenode>
 	`;
 };
@@ -42,7 +42,6 @@ export default {
 		hideFromRoot: { control: 'boolean', description: '' },
 		showMaxNodes: { control: 'number', description: '' },
 		fallback: { control: 'text', description: '' },
-		ownerTree: { control: 'object', description: '' },
 		noWrap: { control: 'boolean', description: '' },
 	},
 	parameters: {
@@ -68,7 +67,6 @@ export const CompanyKtwoktqtxv = {
 		pathSeparator: '#',
 		keyProperty: 'id',
 		keyValue: 'f7a21733-0e65-4985-9e40-a4fb00f3124f',
-		//ownerTree: TreeData,
 	},
 	parameters: {
 		docs: {
@@ -83,7 +81,6 @@ export const CompanyDjpahhofjp = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
-		//ownerTree: TreeData,
 	},
 	parameters: {
 		docs: {
@@ -99,7 +96,6 @@ export const CompanyDjpahhofjpHidingThreeNodes = {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
 		hideFromRoot: 3,
-		//ownerTree: TreeData,
 	},
 	parameters: {
 		docs: {
@@ -115,7 +111,6 @@ export const CompanyKtwoktqtxvWithTwoNodes = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'f7a21733-0e65-4985-9e40-a4fb00f3124f',
-		//ownerTree: TreeData,
 		showMaxNodes: 2,
 	},
 	parameters: {
@@ -132,7 +127,6 @@ export const AlternateSeparator = {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
 		pathSeparator: '##',
-		//ownerTree: TreeData,
 	},
 	parameters: {
 		docs: {
@@ -148,7 +142,6 @@ export const KtwoktqtxvWithNoWrap = {
 		keyProperty: 'id',
 		keyValue: 'f7a21733-0e65-4985-9e40-a4fb00f3124f',
 		noWrap: true,
-		//ownerTree: TreeData,
 	},
 	parameters: {
 		docs: {
