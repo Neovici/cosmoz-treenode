@@ -1,5 +1,5 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
-import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
+import { Tree } from '@neovici/cosmoz-tree/cosmoz-tree';
 import { computePath, computePathToRender } from '../src/cosmoz-treenode';
 
 const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
@@ -8,11 +8,11 @@ const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	missingAncestorTreeUrl = `${treeBaseUrl}/missingAncestorTree.json`,
 	treeFromJsonUrl = async (url) => {
 		const json = await fetch(url).then((r) => r.json());
-		return new DefaultTree(json);
+		return new Tree(json);
 	};
 
 suite('basic', () => {
-	let basicFixture, basicTree: DefaultTree;
+	let basicFixture, basicTree: Tree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
@@ -41,11 +41,7 @@ suite('basic', () => {
 			computePath(basicTree, 'id', '3a7654f1-e3e6-49c7-b6a8-a4fb00f31245'),
 		).deep.equal(basicTree.getPathNodes('1.2.3'));
 		expect(
-			computePath(
-				new DefaultTree({}),
-				'id',
-				'11111111-1111-1111-1111-111111111111',
-			),
+			computePath(new Tree({}), 'id', '11111111-1111-1111-1111-111111111111'),
 		).to.equal(null);
 	});
 
@@ -82,7 +78,7 @@ suite('basic', () => {
 });
 
 suite('lookupNodeById', () => {
-	let basicFixture, basicTree: DefaultTree;
+	let basicFixture, basicTree: Tree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
@@ -107,7 +103,7 @@ suite('lookupNodeById', () => {
 });
 
 suite('multiRoot', () => {
-	let multiRootFixture, multiRootTree: DefaultTree;
+	let multiRootFixture, multiRootTree: Tree;
 
 	suiteSetup(async () => {
 		multiRootTree = await treeFromJsonUrl(multiRootTreeUrl);
@@ -132,7 +128,7 @@ suite('multiRoot', () => {
 });
 
 suite('missingAncestor', () => {
-	let missingAncestorFixture, missingAncestorTree: DefaultTree;
+	let missingAncestorFixture, missingAncestorTree: Tree;
 
 	suiteSetup(async () => {
 		missingAncestorTree = await treeFromJsonUrl(missingAncestorTreeUrl);
