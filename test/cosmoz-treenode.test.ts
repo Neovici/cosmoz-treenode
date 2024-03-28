@@ -1,25 +1,29 @@
 import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
 import { Tree } from '@neovici/cosmoz-tree/cosmoz-tree';
-import { computePath, computePathToRender } from '../src/cosmoz-treenode';
+import {
+	computePath,
+	computePathToRender,
+	TreenodeComponent,
+} from '../src/cosmoz-treenode';
 
 const treeBaseUrl = '/node_modules/@neovici/cosmoz-tree/test/data',
 	basicTreeUrl = `${treeBaseUrl}/basicTree.json`,
 	multiRootTreeUrl = `${treeBaseUrl}/multiRootTree.json`,
 	missingAncestorTreeUrl = `${treeBaseUrl}/missingAncestorTree.json`,
-	treeFromJsonUrl = async (url) => {
+	treeFromJsonUrl = async (url: string) => {
 		const json = await fetch(url).then((r) => r.json());
 		return new Tree(json);
 	};
 
 suite('basic', () => {
-	let basicFixture, basicTree: Tree;
+	let basicFixture: TreenodeComponent, basicTree: Tree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
 	});
 
 	setup(async () => {
-		basicFixture = await fixture(html`
+		basicFixture = await fixture<TreenodeComponent>(html`
 			<cosmoz-treenode
 				key-property="pathLocator"
 				key-value="1.2.3.301"
@@ -59,7 +63,7 @@ suite('basic', () => {
 	test('renders path', async () => {
 		await elementUpdated(basicFixture); // Firefox fails without this one
 		const textContent =
-			basicFixture.shadowRoot.querySelector('span').textContent;
+			basicFixture.shadowRoot!.querySelector('span')!.textContent;
 		expect(textContent).to.include(
 			['Root', 'Node2', 'Node3', 'Node301'].join(' / '),
 		);
@@ -70,7 +74,7 @@ suite('basic', () => {
 		basicFixture.pathSeparator = customSep;
 		await elementUpdated(basicFixture);
 		const textContent =
-			basicFixture.shadowRoot.querySelector('span').textContent;
+			basicFixture.shadowRoot!.querySelector('span')!.textContent;
 		expect(textContent).to.include(
 			['Root', 'Node2', 'Node3', 'Node301'].join(customSep),
 		);
@@ -78,7 +82,7 @@ suite('basic', () => {
 });
 
 suite('lookupNodeById', () => {
-	let basicFixture, basicTree: Tree;
+	let basicFixture: TreenodeComponent, basicTree: Tree;
 
 	suiteSetup(async () => {
 		basicTree = await treeFromJsonUrl(basicTreeUrl);
@@ -97,13 +101,13 @@ suite('lookupNodeById', () => {
 	test('renders path', async () => {
 		await elementUpdated(basicFixture); // Firefox fails without this one
 		const textContent =
-			basicFixture.shadowRoot.querySelector('span').textContent;
+			basicFixture.shadowRoot!.querySelector('span')!.textContent;
 		expect(textContent).to.include(['Root', 'Node2', 'Node3'].join(' / '));
 	});
 });
 
 suite('multiRoot', () => {
-	let multiRootFixture, multiRootTree: Tree;
+	let multiRootFixture: TreenodeComponent, multiRootTree: Tree;
 
 	suiteSetup(async () => {
 		multiRootTree = await treeFromJsonUrl(multiRootTreeUrl);
@@ -122,13 +126,13 @@ suite('multiRoot', () => {
 	test('renders path', async () => {
 		await elementUpdated(multiRootFixture); // Firefox fails without this one
 		const textContent =
-			multiRootFixture.shadowRoot.querySelector('span').textContent;
+			multiRootFixture.shadowRoot!.querySelector('span')!.textContent;
 		expect(textContent).to.include(['Node2', 'Node3'].join(' / '));
 	});
 });
 
 suite('missingAncestor', () => {
-	let missingAncestorFixture, missingAncestorTree: Tree;
+	let missingAncestorFixture: TreenodeComponent, missingAncestorTree: Tree;
 
 	suiteSetup(async () => {
 		missingAncestorTree = await treeFromJsonUrl(missingAncestorTreeUrl);
@@ -147,7 +151,7 @@ suite('missingAncestor', () => {
 	test('renders all path parts', async () => {
 		await elementUpdated(missingAncestorFixture); // Firefox fails without this one
 		const textContent =
-			missingAncestorFixture.shadowRoot.querySelector('span').textContent;
+			missingAncestorFixture.shadowRoot!.querySelector('span')!.textContent;
 		expect(textContent).is.include(['Node301', 'Node401'].join(' / '));
 	});
 });

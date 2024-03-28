@@ -1,5 +1,6 @@
 import { component, html } from '@pionjs/pion';
 import { Tree, Node } from '@neovici/cosmoz-tree/cosmoz-tree';
+import { Component } from '@pionjs/pion/lib/component';
 
 export type Props = {
 	valueProperty: string;
@@ -22,21 +23,21 @@ export interface ComputePathText
 	path: (Node | undefined)[];
 }
 
-export const computePathToRender = (
-		path: (Node | undefined)[],
-		hideFromRoot: number,
-		showMaxNodes: number,
+export const computePathToRender = <T extends string | Node | undefined>(
+		path?: T[],
+		hideFromRoot?: number,
+		showMaxNodes?: number,
 	) => {
 		if (!path) {
 			return;
 		}
 		let pathToRender = path;
-		if (hideFromRoot > 0 && path.length > hideFromRoot) {
+		if (hideFromRoot! > 0 && path.length > hideFromRoot!) {
 			pathToRender = path.slice(hideFromRoot);
 		}
 
-		if (showMaxNodes > 0 && pathToRender.length > showMaxNodes) {
-			pathToRender = path.slice(-showMaxNodes);
+		if (showMaxNodes! > 0 && pathToRender.length > showMaxNodes!) {
+			pathToRender = path.slice(-showMaxNodes!);
 		}
 		return pathToRender;
 	},
@@ -46,8 +47,8 @@ export const computePathToRender = (
 	 * @param {Array} inputPath Array of path parts
 	 * @returns {Array} Array with defined parts
 	 */
-	getKnownPath = (inputPath: (Node | undefined)[] | null) => {
-		let path = inputPath;
+	getKnownPath = <T>(inputPath: T[] | null) => {
+		let path: T[] | null = inputPath;
 		if (!Array.isArray(path) || path.length === 0) {
 			return path;
 		}
@@ -62,9 +63,9 @@ export const computePathToRender = (
 		}
 		return path;
 	},
-	computePath = (ownerTree: Tree, keyProperty: string, keyValue: string) => {
+	computePath = (ownerTree?: Tree, keyProperty?: string, keyValue?: string) => {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-		let path = null;
+		let path: (Node | undefined)[] | null = null;
 
 		if (!ownerTree || keyProperty == null || keyValue === undefined) {
 			return;
@@ -159,6 +160,8 @@ export const computePathToRender = (
 			}),
 		});
 	};
+
+export type TreenodeComponent = Component<Props>;
 
 /**
  * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
