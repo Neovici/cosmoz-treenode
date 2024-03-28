@@ -18,12 +18,12 @@ export interface ComputePathText
 		Props,
 		'ownerTree' | 'ellipsis' | 'valueProperty' | 'pathSeparator'
 	> {
-	pathToRender?: string;
-	path: string;
+	pathToRender?: (Node | undefined)[];
+	path: (Node | undefined)[];
 }
 
 export const computePathToRender = (
-		path: string | undefined,
+		path: (Node | undefined)[],
 		hideFromRoot: number,
 		showMaxNodes: number,
 	) => {
