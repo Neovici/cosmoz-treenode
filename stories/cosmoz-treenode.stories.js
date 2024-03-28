@@ -18,13 +18,13 @@ const TreeNodeTemplate = (
 
 	return html`
 		<cosmoz-treenode
-			key-property=${keyProperty}
-			key-value=${keyValue}
-			value-property=${valueProperty}
-			path-separator=${pathSeparator}
-			?hide-from-root=${hideFromRoot}
-			show-max-nodes=${showMaxNodes}
-			fallback=${fallback}
+			.keyProperty=${keyProperty}
+			.keyValue=${keyValue}
+			.valueProperty=${valueProperty}
+			.pathSeparator=${pathSeparator}
+			.hideFromRoot=${hideFromRoot}
+			.showMaxNodes=${showMaxNodes}
+			.fallback=${fallback}
 			.ownerTree=${ownerTree}
 		></cosmoz-treenode>
 	`;
