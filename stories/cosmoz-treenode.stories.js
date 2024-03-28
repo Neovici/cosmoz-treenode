@@ -30,6 +30,39 @@ const TreeNodeTemplate = (
 	`;
 };
 
+const TreeNodeTemplateWithChildren = (
+	{
+		keyProperty,
+		keyValue,
+		valueProperty,
+		pathSeparator,
+		hideFromRoot,
+		showMaxNodes,
+		fallback,
+	},
+	{ loaded: { treeJson } },
+) => {
+	const ownerTree = new Tree(treeJson);
+
+	return html`
+		<cosmoz-treenode
+			.keyProperty=${keyProperty}
+			.keyValue=${keyValue}
+			.valueProperty=${valueProperty}
+			.pathSeparator=${pathSeparator}
+			.hideFromRoot=${hideFromRoot}
+			.showMaxNodes=${showMaxNodes}
+			.fallback=${fallback}
+			.ownerTree=${ownerTree}
+		>
+			<template>
+				<span style="color: red;" class="separator separator[[index]]">$$</span>
+				<a href="#id=[[node.id]]">[[node.name]]</a>
+			</template>
+		</cosmoz-treenode>
+	`;
+};
+
 export default {
 	title: 'Treenode',
 	render: TreeNodeTemplate,
@@ -152,16 +185,17 @@ export const KtwoktqtxvWithNoWrap = {
 	},
 };
 
-/*
-	Figure it out how to add this version too
-
-	<div>
-		<h2>Alternate template</h2>
-		<cosmoz-treenode id="alternateTemplate" key-property="id" key-value="fc78989a-d213-496c-80db-a4fb00f31252">
-
-			<template>
-				<span style="color: red;" class="separator separator[[index]]">\$\$</span> <a href="#id=[[node.id]]">[[node.name]]</a>
-			</template>
-		</cosmoz-treenode>
-	</div>
-*/
+export const AlternateTemplateWithChildren = TreeNodeTemplateWithChildren.bind(
+	{},
+);
+AlternateTemplateWithChildren.args = {
+	keyProperty: 'id',
+	keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
+};
+AlternateTemplateWithChildren.parameters = {
+	docs: {
+		description: {
+			story: 'Alternate variant with template child',
+		},
+	},
+};
