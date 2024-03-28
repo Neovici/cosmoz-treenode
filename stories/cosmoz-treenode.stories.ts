@@ -1,6 +1,17 @@
+import type { Meta, StoryObj } from '@storybook/web-components';
 import { html } from 'lit-html';
 import '../src/cosmoz-treenode';
-import { Tree } from '@neovici/cosmoz-tree/cosmoz-tree.js';
+import { TreeData, Tree } from '@neovici/cosmoz-tree/cosmoz-tree.js';
+
+export interface TreeNodeTemplateArgs {
+	keyProperty: string;
+	keyValue: string;
+	valueProperty: string;
+	pathSeparator: string;
+	hideFromRoot: boolean;
+	showMaxNodes: number;
+	fallback: string;
+}
 
 const TreeNodeTemplate = (
 	{
@@ -11,8 +22,14 @@ const TreeNodeTemplate = (
 		hideFromRoot,
 		showMaxNodes,
 		fallback,
+	}: TreeNodeTemplateArgs,
+	{
+		loaded: { treeJson },
+	}: {
+		loaded: {
+			treeJson: TreeData;
+		};
 	},
-	{ loaded: { treeJson } },
 ) => {
 	const ownerTree = new Tree(treeJson);
 
@@ -30,7 +47,7 @@ const TreeNodeTemplate = (
 	`;
 };
 
-export default {
+const meta: Meta = {
 	title: 'Treenode',
 	render: TreeNodeTemplate,
 	tags: ['autodocs'],
@@ -62,7 +79,11 @@ export default {
 	],
 };
 
-export const CompanyKtwoktqtxv = {
+export default meta;
+
+type Story = StoryObj<typeof meta>;
+
+export const CompanyKtwoktqtxv: Story = {
 	args: {
 		pathSeparator: '#',
 		keyProperty: 'id',
@@ -77,7 +98,7 @@ export const CompanyKtwoktqtxv = {
 	},
 };
 
-export const CompanyDjpahhofjp = {
+export const CompanyDjpahhofjp: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
@@ -91,7 +112,7 @@ export const CompanyDjpahhofjp = {
 	},
 };
 
-export const CompanyDjpahhofjpHidingThreeNodes = {
+export const CompanyDjpahhofjpHidingThreeNodes: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
@@ -107,7 +128,7 @@ export const CompanyDjpahhofjpHidingThreeNodes = {
 	},
 };
 
-export const CompanyKtwoktqtxvWithTwoNodes = {
+export const CompanyKtwoktqtxvWithTwoNodes: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'f7a21733-0e65-4985-9e40-a4fb00f3124f',
@@ -122,7 +143,7 @@ export const CompanyKtwoktqtxvWithTwoNodes = {
 	},
 };
 
-export const AlternateSeparator = {
+export const AlternateSeparator: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
@@ -137,7 +158,7 @@ export const AlternateSeparator = {
 	},
 };
 
-export const KtwoktqtxvWithNoWrap = {
+export const KtwoktqtxvWithNoWrap: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'f7a21733-0e65-4985-9e40-a4fb00f3124f',
@@ -152,7 +173,7 @@ export const KtwoktqtxvWithNoWrap = {
 	},
 };
 
-export const AlternateTemplateWithChildren = {
+export const AlternateTemplateWithChildren: Story = {
 	args: {
 		keyProperty: 'id',
 		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
