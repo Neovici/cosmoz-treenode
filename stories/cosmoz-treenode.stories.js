@@ -104,7 +104,7 @@ export const CompanyKtwoktqtxv = {
 	parameters: {
 		docs: {
 			description: {
-				story: 'Displaying node: Company Ktwoktqtxv',
+				story: 'Display node: Company Ktwoktqtxv',
 			},
 		},
 	},
@@ -118,7 +118,7 @@ export const CompanyDjpahhofjp = {
 	parameters: {
 		docs: {
 			description: {
-				story: 'Displaying node: Company Djpahhofjp',
+				story: 'Display node: Company Djpahhofjp',
 			},
 		},
 	},
@@ -134,7 +134,7 @@ export const CompanyDjpahhofjpHidingThreeNodes = {
 		docs: {
 			description: {
 				story:
-					'Displaying node: Company Djpahhofjp and hiding the first 3 nodes from root',
+					'Display node: Company Djpahhofjp and hiding the first 3 nodes from root',
 			},
 		},
 	},
@@ -149,7 +149,7 @@ export const CompanyKtwoktqtxvWithTwoNodes = {
 	parameters: {
 		docs: {
 			description: {
-				story: 'Displaying node: Company Ktwoktqtxv and showing only two nodes',
+				story: 'Display node: Company Ktwoktqtxv and showing only two nodes',
 			},
 		},
 	},
@@ -179,7 +179,7 @@ export const KtwoktqtxvWithNoWrap = {
 	parameters: {
 		docs: {
 			description: {
-				story: 'Displaying node: Company Ktwoktqtxv with no-wrap',
+				story: 'Display node: Company Ktwoktqtxv with no-wrap',
 			},
 		},
 	},
