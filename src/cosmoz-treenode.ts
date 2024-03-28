@@ -1,16 +1,43 @@
 import { component, html } from '@pionjs/pion';
+import { Tree, Node } from '@neovici/cosmoz-tree/cosmoz-tree';
+import { Component } from '@pionjs/pion/lib/component';
 
-export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
+export type Props = {
+	valueProperty: string;
+	pathSeparator: string;
+	hideFromRoot: number;
+	showMaxNodes: number;
+	keyProperty: string;
+	keyValue: string;
+	ownerTree: Tree;
+	ellipsis: string;
+	fallback: string;
+};
+
+export interface ComputePathText
+	extends Pick<
+		Props,
+		'ownerTree' | 'ellipsis' | 'valueProperty' | 'pathSeparator'
+	> {
+	pathToRender?: (Node | undefined)[];
+	path: (Node | undefined)[];
+}
+
+export const computePathToRender = <T extends string | Node | undefined>(
+		path?: T[],
+		hideFromRoot?: number,
+		showMaxNodes?: number,
+	) => {
 		if (!path) {
 			return;
 		}
 		let pathToRender = path;
-		if (hideFromRoot > 0 && path.length > hideFromRoot) {
+		if (hideFromRoot! > 0 && path.length > hideFromRoot!) {
 			pathToRender = path.slice(hideFromRoot);
 		}
 
-		if (showMaxNodes > 0 && pathToRender.length > showMaxNodes) {
-			pathToRender = path.slice(-showMaxNodes);
+		if (showMaxNodes! > 0 && pathToRender.length > showMaxNodes!) {
+			pathToRender = path.slice(-showMaxNodes!);
 		}
 		return pathToRender;
 	},
@@ -20,8 +47,8 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 	 * @param {Array} inputPath Array of path parts
 	 * @returns {Array} Array with defined parts
 	 */
-	getKnownPath = (inputPath) => {
-		let path = inputPath;
+	getKnownPath = <T>(inputPath: T[] | null) => {
+		let path: T[] | null = inputPath;
 		if (!Array.isArray(path) || path.length === 0) {
 			return path;
 		}
@@ -36,9 +63,9 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		}
 		return path;
 	},
-	computePath = (ownerTree, keyProperty, keyValue) => {
+	computePath = (ownerTree?: Tree, keyProperty?: string, keyValue?: string) => {
 		// HACK(pasleq): Cosmoz.Tree API needs to be fixed to avoid such code in components
-		let path = null;
+		let path: (Node | undefined)[] | null = null;
 
 		if (!ownerTree || keyProperty == null || keyValue === undefined) {
 			return;
@@ -62,13 +89,13 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		path,
 		valueProperty,
 		pathSeparator,
-	}) => {
+	}: ComputePathText) => {
 		if (!pathToRender) {
 			return '';
 		}
 
 		const stringParts = pathToRender.map((node) =>
-			ownerTree.getProperty(node, valueProperty)
+			ownerTree.getProperty(node, valueProperty),
 		);
 
 		let text = stringParts.join(pathSeparator);
@@ -78,7 +105,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		}
 		return text;
 	},
-	render = ({ title, text }) => html`
+	render = ({ title, text }: { title: string; text: string }) => html`
 		<style>
 			:host {
 				display: block;
@@ -111,7 +138,7 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		ownerTree,
 		ellipsis = '… / ',
 		fallback,
-	}) => {
+	}: Props) => {
 		const path = computePath(ownerTree, keyProperty, keyValue);
 		if (!path) return render({ text: fallback, title: fallback });
 		const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes),
@@ -134,6 +161,8 @@ export const computePathToRender = (path, hideFromRoot, showMaxNodes) => {
 		});
 	};
 
+export type TreenodeComponent = Component<Props>;
+
 /**
  * `cosmoz-treenode` is a component to display a node in a `cosmoz-tree` data structure
  * @polymer
@@ -152,5 +181,5 @@ customElements.define(
 			'show-max-nodes',
 			'fallback',
 		],
-	})
+	}),
 );
