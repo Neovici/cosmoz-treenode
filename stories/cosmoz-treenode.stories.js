@@ -30,39 +30,6 @@ const TreeNodeTemplate = (
 	`;
 };
 
-const TreeNodeTemplateWithChildren = (
-	{
-		keyProperty,
-		keyValue,
-		valueProperty,
-		pathSeparator,
-		hideFromRoot,
-		showMaxNodes,
-		fallback,
-	},
-	{ loaded: { treeJson } },
-) => {
-	const ownerTree = new Tree(treeJson);
-
-	return html`
-		<cosmoz-treenode
-			.keyProperty=${keyProperty}
-			.keyValue=${keyValue}
-			.valueProperty=${valueProperty}
-			.pathSeparator=${pathSeparator}
-			.hideFromRoot=${hideFromRoot}
-			.showMaxNodes=${showMaxNodes}
-			.fallback=${fallback}
-			.ownerTree=${ownerTree}
-		>
-			<template>
-				<span style="color: red;" class="separator separator[[index]]">$$</span>
-				<a href="#id=[[node.id]]">[[node.name]]</a>
-			</template>
-		</cosmoz-treenode>
-	`;
-};
-
 export default {
 	title: 'Treenode',
 	render: TreeNodeTemplate,
@@ -185,17 +152,20 @@ export const KtwoktqtxvWithNoWrap = {
 	},
 };
 
-export const AlternateTemplateWithChildren = TreeNodeTemplateWithChildren.bind(
-	{},
-);
-AlternateTemplateWithChildren.args = {
-	keyProperty: 'id',
-	keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
-};
-AlternateTemplateWithChildren.parameters = {
-	docs: {
-		description: {
-			story: 'Alternate variant with template child',
+export const AlternateTemplateWithChildren = {
+	args: {
+		keyProperty: 'id',
+		keyValue: 'fc78989a-d213-496c-80db-a4fb00f31252',
+		children: html`<template>
+			<span style="color: red;" class="separator separator[[index]]"> $$ </span>
+			<a href="#id=[[node.id]]">[[node.name]]</a>
+		</template>`,
+	},
+	parameters: {
+		docs: {
+			description: {
+				story: 'Alternate variant with template child',
+			},
 		},
 	},
 };
