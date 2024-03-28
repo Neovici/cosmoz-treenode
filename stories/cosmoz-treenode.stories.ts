@@ -4,13 +4,13 @@ import '../src/cosmoz-treenode';
 import { TreeData, Tree } from '@neovici/cosmoz-tree/cosmoz-tree.js';
 
 export interface TreeNodeTemplateArgs {
-	keyProperty: string;
-	keyValue: string;
-	valueProperty: string;
-	pathSeparator: string;
-	hideFromRoot: boolean;
-	showMaxNodes: number;
-	fallback: string;
+	keyProperty?: string;
+	keyValue?: string;
+	valueProperty?: string;
+	pathSeparator?: string;
+	hideFromRoot?: boolean;
+	showMaxNodes?: number;
+	fallback?: string;
 }
 
 const TreeNodeTemplate = (
@@ -27,11 +27,15 @@ const TreeNodeTemplate = (
 		loaded: { treeJson },
 	}: {
 		loaded: {
-			treeJson: TreeData;
+			treeJson?: TreeData;
 		};
 	},
 ) => {
-	const ownerTree = new Tree(treeJson);
+	let ownerTree;
+
+	if (treeJson !== undefined) {
+		ownerTree = new Tree(treeJson);
+	}
 
 	return html`
 		<cosmoz-treenode
@@ -81,7 +85,7 @@ const meta: Meta = {
 
 export default meta;
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj;
 
 export const CompanyKtwoktqtxv: Story = {
 	args: {
