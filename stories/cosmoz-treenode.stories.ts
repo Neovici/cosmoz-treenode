@@ -54,7 +54,6 @@ const TreeNodeTemplate = (
 const meta: Meta = {
 	title: 'Treenode',
 	render: TreeNodeTemplate,
-	tags: ['autodocs'],
 	argTypes: {
 		keyProperty: { control: 'text', description: '' },
 		keyValue: { control: 'text', description: '' },

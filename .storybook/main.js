@@ -5,10 +5,6 @@ const config = {
 	stories: ['../stories/**/*.stories.{js,ts,mdx}'],
 	staticDirs: ['../demo'],
 	addons: ['@storybook/addon-essentials', '@storybook/addon-links'],
-	docs: {
-		//👇 See the table below for the list of supported options
-		autodocs: 'tag',
-	},
 	framework: {
 		name: '@web/storybook-framework-web-components',
 	},
