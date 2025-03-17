@@ -1,0 +1,94 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction/CosmozTreenode" />
+
+# Cosmoz Treenode
+
+`cosmoz-treenode` is a web component that displays a node in a tree data structure. It's part of the Cosmoz suite of components.
+
+## Features
+
+- Display a node's path in a tree structure
+- Customize the display with various options:
+  - Hide nodes from the root
+  - Show a maximum number of nodes
+  - Customize the separator between path parts
+  - Add ellipsis for shortened paths
+  - Provide fallback text when a path cannot be found
+  - Control text wrapping
+
+## Usage
+
+```html
+<cosmoz-treenode
+  key-property="id"
+  key-value="your-node-id"
+  search-property="name"
+  path-string-separator=" / "
+></cosmoz-treenode>
+```
+
+## Properties
+
+<div className="sb-unstyled">
+  <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+    <thead>
+      <tr>
+        <th style={{ textAlign: 'left', padding: '.5rem', borderBottom: '1px solid #ddd' }}>Property</th>
+        <th style={{ textAlign: 'left', padding: '.5rem', borderBottom: '1px solid #ddd' }}>Description</th>
+        <th style={{ textAlign: 'left', padding: '.5rem', borderBottom: '1px solid #ddd' }}>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>keyProperty</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>The property to use as key</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>-</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>keyValue</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>The value to look up</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>-</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>searchProperty</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>The property to display</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>"name"</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>pathStringSeparator</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>Separator between path parts</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>" / "</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>hideFromRoot</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>Number of nodes to hide from the root</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>0</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>showMaxNodes</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>Maximum number of nodes to show</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>0</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>ellipsis</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>Ellipsis to show when path is shortened</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>"&hellip; / "</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>fallback</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>Text to show when path cannot be found</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>" "</td>
+      </tr>
+      <tr>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}><code>noWrap</code></td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>No text wrapping</td>
+        <td style={{ padding: '.5rem', borderBottom: '1px solid #eee' }}>false</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+## Examples
+
+Check out the component examples in the sidebar to see various configurations of the `cosmoz-treenode` component.
