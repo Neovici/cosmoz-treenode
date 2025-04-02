@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.0.0...v6.1.0) (2025-04-02)
+
+
+### Features
+
+* convert to TypeScript ([1f34da4](https://github.com/Neovici/cosmoz-treenode/commit/1f34da4d0896eb0c7edc028c57f7b007dbd17d7b))
+
 # [6.0.0](https://github.com/Neovici/cosmoz-treenode/compare/v5.1.0...v6.0.0) (2024-01-11)
 
 ### Features

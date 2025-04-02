@@ -1,6 +1,6 @@
 {
 	"name": "@neovici/cosmoz-treenode",
-	"version": "6.0.0",
+	"version": "6.1.0",
 	"type": "module",
 	"description": "Utility class to manipulate a tree data structure.",
 	"keywords": [
