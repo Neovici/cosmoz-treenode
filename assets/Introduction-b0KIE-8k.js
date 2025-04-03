@@ -1,4 +1,4 @@
-import{j as e,M as s}from"./index-ByaG5nH-.js";import{useMDXComponents as r}from"./index-Cz9sRDPQ.js";import"./iframe-C3Nfr379.js";import"./index-DV6OZviy.js";import"./index-DrFu-skq.js";function o(t){const d={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...r(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"Introduction/CosmozTreenode"}),`
+import{j as e,M as s}from"./index-Scfwc0R6.js";import{useMDXComponents as r}from"./index-xKkHRYV8.js";import"./iframe-ByINXRUE.js";import"./index-CfOrKyLd.js";import"./index-DrFu-skq.js";function o(t){const d={code:"code",h1:"h1",h2:"h2",li:"li",p:"p",pre:"pre",ul:"ul",...r(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(s,{title:"Introduction/CosmozTreenode"}),`
 `,e.jsx(d.h1,{id:"cosmoz-treenode",children:"Cosmoz Treenode"}),`
 `,e.jsxs(d.p,{children:[e.jsx(d.code,{children:"cosmoz-treenode"})," is a web component that displays a node in a tree data structure. It's part of the Cosmoz suite of components."]}),`
 `,e.jsx(d.h2,{id:"features",children:"Features"}),`
