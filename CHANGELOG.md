@@ -1,3 +1,10 @@
+# [6.2.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.1.0...v6.2.0) (2025-07-21)
+
+
+### Features
+
+* new automerge workflow ([7b6fcbc](https://github.com/Neovici/cosmoz-treenode/commit/7b6fcbcb7f18c5d522aec66d1eb57d0fd319c8ae))
+
 # [6.1.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.0.0...v6.1.0) (2025-04-02)
 
 
