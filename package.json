@@ -113,7 +113,7 @@
 		"eslint-plugin-mocha": "^10.5.0",
 		"globals": "^16.0.0",
 		"husky": "^8.0.0",
-		"semantic-release": "^22.0.0",
+		"semantic-release": "^25.0.2",
 		"storybook": "^8.0.0",
 		"storybook-dark-mode": "^3.0.3",
 		"typescript": "^5.3.3",
