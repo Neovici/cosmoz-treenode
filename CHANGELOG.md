@@ -1,16 +1,20 @@
 # [6.2.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.1.0...v6.2.0) (2025-07-21)
 
+## 6.2.1
+
+### Patch Changes
+
+- eb49e5f: Migrate from semantic-release to changesets
 
 ### Features
 
-* new automerge workflow ([7b6fcbc](https://github.com/Neovici/cosmoz-treenode/commit/7b6fcbcb7f18c5d522aec66d1eb57d0fd319c8ae))
+- new automerge workflow ([7b6fcbc](https://github.com/Neovici/cosmoz-treenode/commit/7b6fcbcb7f18c5d522aec66d1eb57d0fd319c8ae))
 
 # [6.1.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.0.0...v6.1.0) (2025-04-02)
 
-
 ### Features
 
-* convert to TypeScript ([1f34da4](https://github.com/Neovici/cosmoz-treenode/commit/1f34da4d0896eb0c7edc028c57f7b007dbd17d7b))
+- convert to TypeScript ([1f34da4](https://github.com/Neovici/cosmoz-treenode/commit/1f34da4d0896eb0c7edc028c57f7b007dbd17d7b))
 
 # [6.0.0](https://github.com/Neovici/cosmoz-treenode/compare/v5.1.0...v6.0.0) (2024-01-11)
 
