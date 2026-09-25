@@ -1,0 +1,29 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{M as t,a as n,j as r,o as i,y as a}from"./blocks-Dy9OsgQB.js";function o(e){let r={code:`code`,h1:`h1`,h2:`h2`,li:`li`,p:`p`,pre:`pre`,ul:`ul`,...t(),...e.components};return(0,c.jsxs)(c.Fragment,{children:[(0,c.jsx)(n,{title:`Introduction/CosmozTreenode`}),`
+`,(0,c.jsx)(r.h1,{id:`cosmoz-treenode`,children:`Cosmoz Treenode`}),`
+`,(0,c.jsxs)(r.p,{children:[(0,c.jsx)(r.code,{children:`cosmoz-treenode`}),` is a web component that displays a node in a tree data structure. It's part of the Cosmoz suite of components.`]}),`
+`,(0,c.jsx)(r.h2,{id:`features`,children:`Features`}),`
+`,(0,c.jsxs)(r.ul,{children:[`
+`,(0,c.jsx)(r.li,{children:`Display a node's path in a tree structure`}),`
+`,(0,c.jsxs)(r.li,{children:[`Customize the display with various options:`,`
+`,(0,c.jsxs)(r.ul,{children:[`
+`,(0,c.jsx)(r.li,{children:`Hide nodes from the root`}),`
+`,(0,c.jsx)(r.li,{children:`Show a maximum number of nodes`}),`
+`,(0,c.jsx)(r.li,{children:`Customize the separator between path parts`}),`
+`,(0,c.jsx)(r.li,{children:`Add ellipsis for shortened paths`}),`
+`,(0,c.jsx)(r.li,{children:`Provide fallback text when a path cannot be found`}),`
+`,(0,c.jsx)(r.li,{children:`Control text wrapping`}),`
+`]}),`
+`]}),`
+`]}),`
+`,(0,c.jsx)(r.h2,{id:`usage`,children:`Usage`}),`
+`,(0,c.jsx)(r.pre,{children:(0,c.jsx)(r.code,{className:`language-html`,children:`<cosmoz-treenode
+  key-property="id"
+  key-value="your-node-id"
+  search-property="name"
+  path-string-separator=" / "
+></cosmoz-treenode>
+`})}),`
+`,(0,c.jsx)(r.h2,{id:`properties`,children:`Properties`}),`
+`,(0,c.jsx)(`div`,{className:`sb-unstyled`,children:(0,c.jsxs)(`table`,{style:{width:`100%`,borderCollapse:`collapse`},children:[(0,c.jsx)(`thead`,{children:(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`th`,{style:{textAlign:`left`,padding:`.5rem`,borderBottom:`1px solid #ddd`},children:`Property`}),(0,c.jsx)(`th`,{style:{textAlign:`left`,padding:`.5rem`,borderBottom:`1px solid #ddd`},children:`Description`}),(0,c.jsx)(`th`,{style:{textAlign:`left`,padding:`.5rem`,borderBottom:`1px solid #ddd`},children:`Default`})]})}),(0,c.jsxs)(`tbody`,{children:[(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`keyProperty`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`The property to use as key`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`-`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`keyValue`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`The value to look up`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`-`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`searchProperty`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`The property to display`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`"name"`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`pathStringSeparator`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`Separator between path parts`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`" / "`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`hideFromRoot`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`Number of nodes to hide from the root`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`0`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`showMaxNodes`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`Maximum number of nodes to show`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`0`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`ellipsis`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`Ellipsis to show when path is shortened`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`"… / "`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`fallback`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`Text to show when path cannot be found`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`" "`})]}),(0,c.jsxs)(`tr`,{children:[(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:(0,c.jsx)(`code`,{children:`noWrap`})}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`No text wrapping`}),(0,c.jsx)(`td`,{style:{padding:`.5rem`,borderBottom:`1px solid #eee`},children:`false`})]})]})]})}),`
+`,(0,c.jsx)(r.h2,{id:`examples`,children:`Examples`}),`
+`,(0,c.jsxs)(r.p,{children:[`Check out the component examples in the sidebar to see various configurations of the `,(0,c.jsx)(r.code,{children:`cosmoz-treenode`}),` component.`]})]})}function s(e={}){let{wrapper:n}={...t(),...e.components};return n?(0,c.jsx)(n,{...e,children:(0,c.jsx)(o,{...e})}):o(e)}var c;function l(){return(l=e((()=>{c=a(),r(),i()})))()}l();export{s as default};
