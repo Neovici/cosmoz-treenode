@@ -1,5 +1,5 @@
-import { component, html } from '@pionjs/pion';
-import type { Tree, Node } from '@neovici/cosmoz-tree';
+import type { Node, Tree } from '@neovici/cosmoz-tree';
+import { component, html, useEffect, useState } from '@pionjs/pion';
 
 export const computePathToRender = (
 	path?: Node[],
@@ -51,24 +51,24 @@ export const getKnownPath = (inputPath?: Node[]): Node[] | undefined => {
 	return path;
 };
 
-export const computePath = (
+export const computePath = async (
 	ownerTree?: Tree,
 	keyProperty?: string,
 	keyValue?: string,
-): Node[] | undefined => {
+): Promise<Node[] | undefined> => {
 	if (!ownerTree || keyProperty == null || keyValue === undefined) {
 		return undefined;
 	}
 
 	if (keyProperty === 'pathLocator') {
-		return getKnownPath(ownerTree.getPathNodes(keyValue) as Node[]);
+		return getKnownPath((await ownerTree.getPathNodes(keyValue)) as Node[]);
 	}
 
-	const node = ownerTree.getNodeByProperty(keyValue, keyProperty);
+	const node = await ownerTree.getNodeByProperty(keyValue, keyProperty);
 
 	return getKnownPath(
 		node?.pathLocator
-			? (ownerTree.getPathNodes(node.pathLocator) as Node[])
+			? ((await ownerTree.getPathNodes(node.pathLocator)) as Node[])
 			: undefined,
 	);
 };
@@ -82,20 +82,20 @@ interface PathTextParams {
 	pathSeparator: string;
 }
 
-export const computePathText = ({
+export const computePathText = async ({
 	ownerTree,
 	ellipsis,
 	pathToRender,
 	path,
 	valueProperty,
 	pathSeparator,
-}: PathTextParams): string => {
+}: PathTextParams): Promise<string> => {
 	if (!pathToRender) {
 		return '';
 	}
 
-	const stringParts = pathToRender.map((node) =>
-		ownerTree.getProperty(node, valueProperty),
+	const stringParts = await Promise.all(
+		pathToRender.map((node) => ownerTree.getProperty(node, valueProperty)),
 	);
 
 	let text = stringParts.join(pathSeparator);
@@ -159,30 +159,58 @@ export const Treenode = ({
 	ellipsis = '… / ',
 	fallback,
 }: TreeNodeProps) => {
-	const path = computePath(ownerTree, keyProperty, keyValue);
+	const [texts, setTexts] = useState<RenderParams>();
 
-	if (!path) {
-		return render({ text: fallback || '', title: fallback || '' });
-	}
+	useEffect(() => {
+		let cancelled = false;
 
-	const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes);
-	const opts = {
+		setTexts(undefined);
+
+		const resolveTexts = async () => {
+			const path = await computePath(ownerTree, keyProperty, keyValue);
+
+			if (cancelled || !path) {
+				return;
+			}
+
+			const opts = {
+				ownerTree,
+				ellipsis,
+				path,
+				valueProperty: searchProperty,
+				pathSeparator: pathStringSeparator,
+			} as PathTextParams;
+
+			const [text, title] = await Promise.all([
+				computePathText({
+					...opts,
+					pathToRender: computePathToRender(path, hideFromRoot, showMaxNodes),
+				}),
+				computePathText({ ...opts, pathToRender: path }),
+			]);
+
+			if (!cancelled) {
+				setTexts({ text, title });
+			}
+		};
+
+		resolveTexts();
+
+		return () => {
+			cancelled = true;
+		};
+	}, [
 		ownerTree,
+		keyProperty,
+		keyValue,
+		searchProperty,
+		pathStringSeparator,
+		hideFromRoot,
+		showMaxNodes,
 		ellipsis,
-		path,
-		valueProperty: searchProperty,
-		pathSeparator: pathStringSeparator,
-	} as PathTextParams;
-	return render({
-		text: computePathText({
-			...opts,
-			pathToRender,
-		}),
-		title: computePathText({
-			...opts,
-			pathToRender: path,
-		}),
-	});
+	]);
+
+	return render(texts ?? { text: fallback || '', title: fallback || '' });
 };
 
 /**

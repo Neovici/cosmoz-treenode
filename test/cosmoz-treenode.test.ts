@@ -1,6 +1,12 @@
-import { html, fixture, expect, elementUpdated } from '@open-wc/testing';
-import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
 import type { Node, Tree } from '@neovici/cosmoz-tree';
+import { DefaultTree } from '@neovici/cosmoz-tree/cosmoz-default-tree';
+import {
+	elementUpdated,
+	expect,
+	fixture,
+	html,
+	nextFrame,
+} from '@open-wc/testing';
 import { computePath, computePathToRender } from '../src';
 
 interface CosmozTreenode extends HTMLElement {
@@ -47,16 +53,24 @@ suite('cosmoz-treenode', () => {
 			expect(basicFixture.tagName).to.equal('COSMOZ-TREENODE');
 		});
 
-		test('computePath', () => {
-			expect(computePath()).to.equal(undefined);
+		test('computePath', async () => {
+			expect(await computePath()).to.equal(undefined);
 			expect(
-				computePath(basicTree, 'id', '11111111-1111-1111-1111-111111111111'),
-			).deep.equal(basicTree.getPathNodes('1'));
+				await computePath(
+					basicTree,
+					'id',
+					'11111111-1111-1111-1111-111111111111',
+				),
+			).deep.equal(await basicTree.getPathNodes('1'));
 			expect(
-				computePath(basicTree, 'id', '3a7654f1-e3e6-49c7-b6a8-a4fb00f31245'),
-			).deep.equal(basicTree.getPathNodes('1.2.3'));
+				await computePath(
+					basicTree,
+					'id',
+					'3a7654f1-e3e6-49c7-b6a8-a4fb00f31245',
+				),
+			).deep.equal(await basicTree.getPathNodes('1.2.3'));
 			expect(
-				computePath(
+				await computePath(
 					new DefaultTree({}),
 					'id',
 					'11111111-1111-1111-1111-111111111111',
@@ -95,6 +109,86 @@ suite('cosmoz-treenode', () => {
 			expect(textContent).to.include(
 				['Root', 'Node2', 'Node3', 'Node301'].join(customSep),
 			);
+		});
+
+		test('renders fallback while the path is pending', async () => {
+			basicFixture.fallback = 'Not found';
+			basicFixture.keyValue = '1.2.4';
+			await elementUpdated(basicFixture);
+			expect(
+				basicFixture.shadowRoot?.querySelector('span')?.textContent,
+			).to.include('Not found');
+		});
+
+		test('renders fallback when the key value is not set', async () => {
+			basicFixture.fallback = 'Not found';
+			basicFixture.keyValue = undefined;
+			await elementUpdated(basicFixture);
+			expect(
+				basicFixture.shadowRoot?.querySelector('span')?.textContent,
+			).to.include('Not found');
+		});
+
+		test('swaps the fallback for the resolved path', async () => {
+			basicFixture.fallback = 'Not found';
+			basicFixture.keyValue = undefined;
+			await elementUpdated(basicFixture);
+			expect(
+				basicFixture.shadowRoot?.querySelector('span')?.textContent,
+			).to.include('Not found');
+
+			basicFixture.keyValue = '1.2.3.301';
+			await elementUpdated(basicFixture);
+			await nextFrame();
+			expect(
+				basicFixture.shadowRoot?.querySelector('span')?.textContent,
+			).to.include(['Root', 'Node2', 'Node3', 'Node301'].join(' / '));
+		});
+	});
+
+	suite('pending', () => {
+		let fixtureElement: CosmozTreenode;
+
+		const deferredTree = (): Tree => {
+			const tree = new DefaultTree({});
+			let release: () => void;
+			const gate = new Promise<void>((resolve) => {
+				release = resolve;
+			});
+			tree.getPathNodes = (async (pathLocator = '') => {
+				await gate;
+				return [
+					{ id: 'root', name: 'Root', pathLocator: '1' },
+					{ id: 'leaf', name: 'Leaf', pathLocator },
+				] as Node[];
+			}) as Tree['getPathNodes'];
+			return Object.assign(tree, { release: () => release() });
+		};
+
+		setup(async () => {
+			fixtureElement = await fixture<CosmozTreenode>(html`
+				<cosmoz-treenode
+					fallback="…"
+					key-property="pathLocator"
+					key-value="1.2.3"
+				></cosmoz-treenode>
+			`);
+			fixtureElement.ownerTree = deferredTree();
+		});
+
+		test('renders fallback until the path resolves', async () => {
+			await elementUpdated(fixtureElement);
+			await nextFrame();
+			expect(
+				fixtureElement.shadowRoot?.querySelector('span')?.textContent,
+			).to.include('…');
+
+			(fixtureElement.ownerTree as Tree & { release: () => void }).release();
+			await nextFrame();
+			await nextFrame();
+			expect(
+				fixtureElement.shadowRoot?.querySelector('span')?.textContent,
+			).to.include(['Root', 'Leaf'].join(' / '));
 		});
 	});
 
