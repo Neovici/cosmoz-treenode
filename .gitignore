@@ -8,3 +8,8 @@ yarn-error.log
 .DS_Store
 .eslintcache
 .envrc
+
+# codecov uploader artifacts
+codecov
+codecov.SHA256SUM
+codecov.SHA256SUM.sig
