@@ -1,10 +1,9 @@
 import './cosmoz-treenode';
 
 export {
-	computePathToRender,
-	getKnownPath,
+	Treenode,
 	computePath,
 	computePathText,
-	render,
-	Treenode,
+	computePathToRender,
+	getKnownPath,
 } from './cosmoz-treenode';

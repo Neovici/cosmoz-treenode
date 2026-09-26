@@ -1,5 +1,6 @@
-import { component, html } from '@pionjs/pion';
-import type { Tree, Node } from '@neovici/cosmoz-tree';
+import type { Node, Tree } from '@neovici/cosmoz-tree';
+import { component, css, html, useMemo } from '@pionjs/pion';
+import { until } from 'lit-html/directives/until.js';
 
 export const computePathToRender = (
 	path?: Node[],
@@ -51,24 +52,24 @@ export const getKnownPath = (inputPath?: Node[]): Node[] | undefined => {
 	return path;
 };
 
-export const computePath = (
+export const computePath = async (
 	ownerTree?: Tree,
 	keyProperty?: string,
 	keyValue?: string,
-): Node[] | undefined => {
+): Promise<Node[] | undefined> => {
 	if (!ownerTree || keyProperty == null || keyValue === undefined) {
 		return undefined;
 	}
 
 	if (keyProperty === 'pathLocator') {
-		return getKnownPath(ownerTree.getPathNodes(keyValue) as Node[]);
+		return getKnownPath((await ownerTree.getPathNodes(keyValue)) as Node[]);
 	}
 
-	const node = ownerTree.getNodeByProperty(keyValue, keyProperty);
+	const node = await ownerTree.getNodeByProperty(keyValue, keyProperty);
 
 	return getKnownPath(
 		node?.pathLocator
-			? (ownerTree.getPathNodes(node.pathLocator) as Node[])
+			? ((await ownerTree.getPathNodes(node.pathLocator)) as Node[])
 			: undefined,
 	);
 };
@@ -82,20 +83,20 @@ interface PathTextParams {
 	pathSeparator: string;
 }
 
-export const computePathText = ({
+export const computePathText = async ({
 	ownerTree,
 	ellipsis,
 	pathToRender,
 	path,
 	valueProperty,
 	pathSeparator,
-}: PathTextParams): string => {
+}: PathTextParams): Promise<string> => {
 	if (!pathToRender) {
 		return '';
 	}
 
-	const stringParts = pathToRender.map((node) =>
-		ownerTree.getProperty(node, valueProperty),
+	const stringParts = await Promise.all(
+		pathToRender.map((node) => ownerTree.getProperty(node, valueProperty)),
 	);
 
 	let text = stringParts.join(pathSeparator);
@@ -107,33 +108,25 @@ export const computePathText = ({
 	return text;
 };
 
-interface RenderParams {
-	title: string;
-	text: string;
-}
+const style = css`
+	:host {
+		display: block;
+	}
 
-export const render = ({ title, text }: RenderParams) => html`
-	<style>
-		:host {
-			display: block;
-		}
-
-		:host([no-wrap]) {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			direction: rtl;
-		}
-		/* Safari only css fix */
-		@media not all and (min-resolution: 0.001dpcm) {
-			@supports (-webkit-appearance: none) {
-				:host span {
-					display: inline-block;
-				}
+	:host([no-wrap]) {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		direction: rtl;
+	}
+	/* Safari only css fix */
+	@media not all and (min-resolution: 0.001dpcm) {
+		@supports (-webkit-appearance: none) {
+			:host span {
+				display: inline-block;
 			}
 		}
-	</style>
-	<span title=${title}>&lrm;${text}</span>
+	}
 `;
 
 interface TreeNodeProps {
@@ -159,30 +152,64 @@ export const Treenode = ({
 	ellipsis = '… / ',
 	fallback,
 }: TreeNodeProps) => {
-	const path = computePath(ownerTree, keyProperty, keyValue);
+	const path$ = useMemo(
+		() => computePath(ownerTree, keyProperty, keyValue),
+		[ownerTree, keyProperty, keyValue],
+	);
 
-	if (!path) {
-		return render({ text: fallback || '', title: fallback || '' });
-	}
+	const text$ = useMemo(async () => {
+		const path = await path$;
 
-	const pathToRender = computePathToRender(path, hideFromRoot, showMaxNodes);
-	const opts = {
+		if (!path) {
+			return fallback || '';
+		}
+
+		return computePathText({
+			ownerTree,
+			ellipsis,
+			path,
+			pathToRender: computePathToRender(path, hideFromRoot, showMaxNodes),
+			valueProperty: searchProperty,
+			pathSeparator: pathStringSeparator,
+		} as PathTextParams);
+	}, [
+		path$,
 		ownerTree,
 		ellipsis,
-		path,
-		valueProperty: searchProperty,
-		pathSeparator: pathStringSeparator,
-	} as PathTextParams;
-	return render({
-		text: computePathText({
-			...opts,
-			pathToRender,
-		}),
-		title: computePathText({
-			...opts,
+		hideFromRoot,
+		showMaxNodes,
+		searchProperty,
+		pathStringSeparator,
+		fallback,
+	]);
+
+	const title$ = useMemo(async () => {
+		const path = await path$;
+
+		if (!path) {
+			return fallback || '';
+		}
+
+		return computePathText({
+			ownerTree,
+			ellipsis,
+			path,
 			pathToRender: path,
-		}),
-	});
+			valueProperty: searchProperty,
+			pathSeparator: pathStringSeparator,
+		} as PathTextParams);
+	}, [
+		path$,
+		ownerTree,
+		ellipsis,
+		searchProperty,
+		pathStringSeparator,
+		fallback,
+	]);
+
+	return html`
+		<span title=${until(title$, fallback)}>&lrm;${until(text$, fallback)}</span>
+	`;
 };
 
 /**
@@ -193,6 +220,7 @@ export const Treenode = ({
 customElements.define(
 	'cosmoz-treenode',
 	component(Treenode, {
+		styleSheets: [style],
 		observedAttributes: [
 			'key-property',
 			'key-value',
