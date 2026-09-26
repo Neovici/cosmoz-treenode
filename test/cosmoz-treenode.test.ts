@@ -100,6 +100,13 @@ suite('cosmoz-treenode', () => {
 			);
 		});
 
+		test('renders path as title', async () => {
+			await elementUpdated(basicFixture);
+			expect(
+				basicFixture.shadowRoot?.querySelector('span')?.getAttribute('title'),
+			).to.equal(['Root', 'Node2', 'Node3', 'Node301'].join(' / '));
+		});
+
 		test('uses pathStringSeparator', async () => {
 			const customSep = '#';
 			basicFixture.pathStringSeparator = customSep;
