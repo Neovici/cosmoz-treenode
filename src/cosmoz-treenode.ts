@@ -1,5 +1,6 @@
 import type { Node, Tree } from '@neovici/cosmoz-tree';
-import { component, html, useEffect, useState } from '@pionjs/pion';
+import { component, css, html, useMemo } from '@pionjs/pion';
+import { until } from 'lit-html/directives/until.js';
 
 export const computePathToRender = (
 	path?: Node[],
@@ -107,33 +108,25 @@ export const computePathText = async ({
 	return text;
 };
 
-interface RenderParams {
-	title: string;
-	text: string;
-}
+const style = css`
+	:host {
+		display: block;
+	}
 
-export const render = ({ title, text }: RenderParams) => html`
-	<style>
-		:host {
-			display: block;
-		}
-
-		:host([no-wrap]) {
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			direction: rtl;
-		}
-		/* Safari only css fix */
-		@media not all and (min-resolution: 0.001dpcm) {
-			@supports (-webkit-appearance: none) {
-				:host span {
-					display: inline-block;
-				}
+	:host([no-wrap]) {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		direction: rtl;
+	}
+	/* Safari only css fix */
+	@media not all and (min-resolution: 0.001dpcm) {
+		@supports (-webkit-appearance: none) {
+			:host span {
+				display: inline-block;
 			}
 		}
-	</style>
-	<span title=${title}>&lrm;${text}</span>
+	}
 `;
 
 interface TreeNodeProps {
@@ -159,58 +152,64 @@ export const Treenode = ({
 	ellipsis = '… / ',
 	fallback,
 }: TreeNodeProps) => {
-	const [texts, setTexts] = useState<RenderParams>();
+	const path$ = useMemo(
+		() => computePath(ownerTree, keyProperty, keyValue),
+		[ownerTree, keyProperty, keyValue],
+	);
 
-	useEffect(() => {
-		let cancelled = false;
+	const text$ = useMemo(async () => {
+		const path = await path$;
 
-		setTexts(undefined);
+		if (!path) {
+			return fallback || '';
+		}
 
-		const resolveTexts = async () => {
-			const path = await computePath(ownerTree, keyProperty, keyValue);
-
-			if (cancelled || !path) {
-				return;
-			}
-
-			const opts = {
-				ownerTree,
-				ellipsis,
-				path,
-				valueProperty: searchProperty,
-				pathSeparator: pathStringSeparator,
-			} as PathTextParams;
-
-			const [text, title] = await Promise.all([
-				computePathText({
-					...opts,
-					pathToRender: computePathToRender(path, hideFromRoot, showMaxNodes),
-				}),
-				computePathText({ ...opts, pathToRender: path }),
-			]);
-
-			if (!cancelled) {
-				setTexts({ text, title });
-			}
-		};
-
-		resolveTexts();
-
-		return () => {
-			cancelled = true;
-		};
+		return computePathText({
+			ownerTree,
+			ellipsis,
+			path,
+			pathToRender: computePathToRender(path, hideFromRoot, showMaxNodes),
+			valueProperty: searchProperty,
+			pathSeparator: pathStringSeparator,
+		} as PathTextParams);
 	}, [
+		path$,
 		ownerTree,
-		keyProperty,
-		keyValue,
-		searchProperty,
-		pathStringSeparator,
+		ellipsis,
 		hideFromRoot,
 		showMaxNodes,
-		ellipsis,
+		searchProperty,
+		pathStringSeparator,
+		fallback,
 	]);
 
-	return render(texts ?? { text: fallback || '', title: fallback || '' });
+	const title$ = useMemo(async () => {
+		const path = await path$;
+
+		if (!path) {
+			return fallback || '';
+		}
+
+		return computePathText({
+			ownerTree,
+			ellipsis,
+			path,
+			pathToRender: path,
+			valueProperty: searchProperty,
+			pathSeparator: pathStringSeparator,
+		} as PathTextParams);
+	}, [
+		path$,
+		ownerTree,
+		ellipsis,
+		searchProperty,
+		pathStringSeparator,
+		fallback,
+	]);
+
+	return html`
+		<span title=${until(title$, fallback)}>&lrm;${until(text$, fallback)}</span>
+	`;
 };
 
 /**
@@ -221,6 +220,7 @@ export const Treenode = ({
 customElements.define(
 	'cosmoz-treenode',
 	component(Treenode, {
+		styleSheets: [style],
 		observedAttributes: [
 			'key-property',
 			'key-value',
