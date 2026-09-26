@@ -1,5 +1,18 @@
 # [6.2.0](https://github.com/Neovici/cosmoz-treenode/compare/v6.1.0...v6.2.0) (2025-07-21)
 
+## 7.0.0
+
+### Major Changes
+
+- 533b2a1: Migrate to the async cosmoz-tree 4 API.
+
+  `computePath` and `computePathText` now return promises, and
+  `@neovici/cosmoz-tree` is bumped to `^4.0.0`. The element renders its
+  `fallback` prop while the path is unresolved and swaps in the resolved path
+  once it arrives.
+
+  The `render` export is removed.
+
 ## 6.2.1
 
 ### Patch Changes
